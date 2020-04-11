@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Tlappka</string>
+
+
+    // Onboarding strings
+    <string name="onboarding_skip">Přeskočit</string>
+    <string name="onboarding_next">Další</string>
+    //Titles
+    <string name="onboarding_title_one">SDÍLEJ AKTIVITY, FOTKY A VIDEA.
+SLEDUJ, OTLAPKUJ A KOMENTUJ AKTIVITU PŘÁTEL.</string>
+    <string name="onboarding_title_two">VYRAŽ NA PROCHÁZKU
+A POZVI SVÉ PŘÁTELE</string>
+    <string name="onboarding_title_three">POZNEJ S MAZLÍČKY NOVÉ KAMARÁDY V OKOLÍ</string>
+    <string name="onboarding_title_four">VYTVOŘ PROFIL PRO SEBE
+A SVÉ MAZLÍČKY</string>
+    //Descriptions
+    <string name="onboarding_desc_one">Tady je svět nadšenců do zvířátek, kteří určitě ocení jakýkoli příspěvěk týkající se Tvého života s mazlíčky, ať už novou fotku, vtipné video nebo rekordně dlouhou procházku. Můžete vzájemně "otlapkovat" své aktivity a psát komentáře.</string>
+    <string name="onboarding_desc_two">S Tlappkou je snadné zůstat aktivní! Zorganizuj události a pozvi své přátele a jejich mazlíčky. Naplánuj společnou procházku, nebo vyraž na procházku jen sám se svými mazlíky, využij GPS sledování trasy a pak svůj výkon sdílej s kamarády.</string>
+    <string name="onboarding_desc_three">Tlappka propojuje majitele domácích mazlíčků. Snadno se seznámíš s novými lidmi podobného smýšlení nebo najdeš nového kamaráda pro svého mazlíčka. Vyhledej osobu a jejich zvířátko a pozvi je třeba na procházku.</string>
+    <string name="onboarding_desc_four">Profil Tebe a Tvých mazlíčků jsou propojené a tak je orientace i pro Tvé přátele velmi jednoduchá a intuitivní. Není potřeba žádné dlouhé vyplňování - keep it simple and fun. Pár minut, vše je hotovo a můžeš naplno začít využívat Tlappku.</string>
+
+    <string name="activity_singup_text">Přihlášení</string>
+    <string name="activity_register_text">Registrace</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+</resources>
