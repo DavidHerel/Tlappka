@@ -21,8 +21,17 @@ A SVÉ MAZLÍČKY</string>
 
     <string name="activity_singup_text">Přihlášení</string>
     <string name="activity_register_text">Registrace</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
+    <string name="activity_signin_button">Přihlásit se</string>
+    <string name="activity_signin_noacc">Vytvořit účet</string>
+    <string name="activity_register_noacc">Máte již účet? Přihlašte se</string>
+    <string name="activity_name_text">Jméno</string>
+    <string name="activity_email_text">Email</string>
+    <string name="activity_password_text">Heslo</string>
+    <string name="activity_email_text_error">Zadejte validní emailovou adresu</string>
+    <string name="activity_password_text_error">Heslo musí mít minimální délku 4</string>
+    <string name="activity_name_text_error">Jméno musí mít minimální délku 3</string>
+
+
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome !"</string>

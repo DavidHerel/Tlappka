@@ -14,6 +14,9 @@ import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_onboarding.*
 
+/**
+ * Activity that handles onboarding through viewpager2
+ */
 class OnboardingActivity : AppCompatActivity() {
     private var onboardingAdapter: OnboardingAdapter? = null;
     private var layoutOnboardingIndicators : LinearLayout? = null;
@@ -22,16 +25,22 @@ class OnboardingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
 
+        //set up indicators (4 nowadays)
         layoutOnboardingIndicators = findViewById(R.id.layoutOnboardingIndicators);
 
+        //fill onBoardingitems with image,title and description
         setupOnboardingItems();
 
+        //send filled onboarding items to viewpager2
         val onBoardingViewPager: ViewPager2 = findViewById(R.id.onBoardingViewPager);
         onBoardingViewPager.adapter = onboardingAdapter;
 
+        //now set up Indicators
         setupOnboardingIndicators();
+        //set first indicator as first
         setCurrentOnboardingIndicator(0);
 
+        //allow user to swipe between indicators and onboarding items
         onBoardingViewPager.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -40,10 +49,13 @@ class OnboardingActivity : AppCompatActivity() {
             }
         });
 
+        //if user clicked on button Next lets show next indicator with onboardingitem
         buttonOnboardingAction.setOnClickListener {
+            //increase current item by 1
             if (onBoardingViewPager.currentItem + 1 < onboardingAdapter?.itemCount!!) {
                 onBoardingViewPager.currentItem += 1;
             } else {
+                //when we are on the end start Login activity
                 Intent(applicationContext, LoginActivity::class.java).also {
                     startActivity(it)
                 }
@@ -51,7 +63,10 @@ class OnboardingActivity : AppCompatActivity() {
             }
         }
 
+        //hide button background to look like textview (for some reason I couldnt clicked on textview..dont know why)
         skipIntro.background = null;
+
+        //if user wants to skip intro
         skipIntro.setOnClickListener {
                 Intent(applicationContext, LoginActivity::class.java).also {
                     startActivity(it)
@@ -60,6 +75,9 @@ class OnboardingActivity : AppCompatActivity() {
         }
     }
 
+    /*
+    Function that setups all onboarding items
+     */
     private fun setupOnboardingItems(){
         val onboardingItems :ArrayList<OnboardingItem> = ArrayList();
 
@@ -92,6 +110,9 @@ class OnboardingActivity : AppCompatActivity() {
         onboardingAdapter = OnboardingAdapter(onboardingItems);
     }
 
+    /**
+     * Function that setups onboarding indicators
+     */
     private fun setupOnboardingIndicators(){
         var indicators : ImageView;
         var layoutParams : LinearLayout.LayoutParams = LinearLayout.LayoutParams(
@@ -110,6 +131,10 @@ class OnboardingActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Set current onboarding indicator
+     * typical start with first (0)
+     */
     private fun setCurrentOnboardingIndicator(index : Int){
         var childCount : Int? = layoutOnboardingIndicators?.childCount
         for(i in 0 until childCount!!){
