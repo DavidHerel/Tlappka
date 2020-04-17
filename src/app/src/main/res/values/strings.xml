@@ -38,4 +38,13 @@ A SVÉ MAZLÍČKY</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="settings">Nastavení</string>
+    <string name="help">Nápověda</string>
+    <string name="about">O aplikaci</string>
+    <string name="main_news">Novinky</string>
+    <string name="bottom_nav_home">DOMŮ</string>
+    <string name="bottom_nav_notifications">OZNÁMENÍ</string>
+    <string name="bottom_nav_friends">PŘÁTELÉ</string>
+    <string name="bottom_nav_events">UDÁLOSTI</string>
+    <string name="bottom_nav_profile">PROFIL</string>
 </resources>
