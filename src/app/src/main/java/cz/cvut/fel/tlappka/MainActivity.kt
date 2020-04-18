@@ -3,12 +3,11 @@ package cz.cvut.fel.tlappka
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
-import android.widget.Toolbar
-import androidx.databinding.DataBindingUtil
 import androidx.databinding.DataBindingUtil.setContentView
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import cz.cvut.fel.tlappka.databinding.ActivityMainBinding
+import cz.cvut.fel.tlappka.home.HomeFragment
 
 class MainActivity : AppCompatActivity() {
 

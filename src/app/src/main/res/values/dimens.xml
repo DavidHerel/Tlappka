@@ -5,4 +5,7 @@
     <dimen name="toolbar_vertical_padding">8dp</dimen>
     <dimen name="basic_padding">10dp</dimen>
     <dimen name="bottom_navi_icon_size">24dp</dimen>
+
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="general_space">12dp</dimen>
 </resources>
