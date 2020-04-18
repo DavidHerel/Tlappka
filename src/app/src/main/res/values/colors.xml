@@ -7,5 +7,6 @@
     <color name="colorTextSecondary">#BEFFFFFF</color>
     <color name="colorPrimaryGrey">#98007A8D</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorWhiteTransparent90">#90FFFFFF</color>
     <color name="colorOnboardingIndicatorInactive">#72BCF7</color>
 </resources>

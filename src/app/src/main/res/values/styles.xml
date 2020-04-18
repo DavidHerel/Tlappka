@@ -8,4 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="Widget.BottomNavigationView"
+        parent="Widget.Design.BottomNavigationView">
+        <item name="fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="basic_fragment_layout">
+        <item name="android:layout_marginTop">60dp</item>
+    </style>
+
 </resources>

@@ -3,4 +3,6 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="toolbar_vertical_padding">8dp</dimen>
+    <dimen name="basic_padding">10dp</dimen>
+    <dimen name="bottom_navi_icon_size">24dp</dimen>
 </resources>

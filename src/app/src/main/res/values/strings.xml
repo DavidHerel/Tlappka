@@ -47,4 +47,11 @@ A SVÉ MAZLÍČKY</string>
     <string name="bottom_nav_friends">PŘÁTELÉ</string>
     <string name="bottom_nav_events">UDÁLOSTI</string>
     <string name="bottom_nav_profile">PROFIL</string>
+
+    <string name="text_profile_fragment">Profil</string>
+    <string name="text_home_fragment">Novinky</string>
+    <string name="text_friends_fragment">Přátelé</string>
+    <string name="text_event_fragment">Události</string>
+    <string name="text_notifications_fragment">Oznámení</string>
+
 </resources>
