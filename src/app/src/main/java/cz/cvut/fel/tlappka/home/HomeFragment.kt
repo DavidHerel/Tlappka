@@ -1,10 +1,11 @@
 package cz.cvut.fel.tlappka.home
 
 import android.os.Bundle
+import android.view.*
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.home.model.Post
@@ -36,5 +37,4 @@ class HomeFragment : Fragment() {
         recyclerView.adapter = PostsAdapter(posts, activity!!.applicationContext)
 
     }
-
 }

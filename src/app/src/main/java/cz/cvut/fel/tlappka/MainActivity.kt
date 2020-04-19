@@ -1,13 +1,21 @@
 package cz.cvut.fel.tlappka
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
+import androidx.appcompat.widget.Toolbar
+import androidx.databinding.DataBindingUtil
 import androidx.databinding.DataBindingUtil.setContentView
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import cz.cvut.fel.tlappka.databinding.ActivityMainBinding
 import cz.cvut.fel.tlappka.home.HomeFragment
+import cz.cvut.fel.tlappka.options.AboutActivity
+import cz.cvut.fel.tlappka.options.HelpActivity
+import cz.cvut.fel.tlappka.options.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -45,27 +53,52 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = setContentView(this, R.layout.activity_main)
 
-        // TODO: Replace findViewById() with binding object handle - error not Toolbar object
-        /*val toolbar: Toolbar = binding.homeToolbar
-        setSupportActionBar(binding.homeToolbar)
-        supportActionBar?.setTitle("Novinky")*/
-        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.home_toolbar)
+        super.onCreate(savedInstanceState)
+        val binding : ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        val toolbar : Toolbar = binding.homeToolbar as Toolbar
         setSupportActionBar(toolbar)
         supportActionBar?.setTitle("Novinky")
-
         binding.bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         replaceFragment(HomeFragment())
 
+//        utils for navigation -- which is currently not working o.O
+//        val navController = this.findNavController(R.id.myNavHostFragment)
+//        NavigationUI.setupActionBarWithNavController(this, navController)
+
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
-        inflater.inflate(R.menu.menu, menu)
+        inflater.inflate(R.menu.options_menu, menu)
         return true
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.settings_item -> {
+                val intent = Intent(this, SettingsActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.help_item -> {
+                val intent = Intent(this, HelpActivity::class.java)
+                startActivity(intent)
+            }
+            // about
+            else -> {
+                val intent = Intent(this, AboutActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    ////  TODO: Connect navigation with options menu
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return NavigationUI.onNavDestinationSelected(item, this.findNavController(R.id.myNavHostFragment))  ||
+//                super.onOptionsItemSelected(item)
+//    }
 
     private fun replaceFragment(fragment: Fragment) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
