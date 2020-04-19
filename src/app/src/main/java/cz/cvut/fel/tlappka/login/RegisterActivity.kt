@@ -12,6 +12,8 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.FirebaseAuth
 import cz.cvut.fel.tlappka.MainActivity
 import cz.cvut.fel.tlappka.R
 
@@ -21,11 +23,15 @@ Activity which is hadnling registers
 class RegisterActivity : AppCompatActivity() {
 
     private val TAG = "RegisterActivity"
+    private lateinit var auth: FirebaseAuth
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+
+        //init firebase
+        auth = FirebaseAuth.getInstance()
 
         //register buttons
         val _signupButton : Button = findViewById(R.id.btn_register);
@@ -49,7 +55,6 @@ class RegisterActivity : AppCompatActivity() {
     Function that handles registraion button click
      */
     fun signup() {
-
         //find components
         val _nameText: EditText = findViewById(R.id.input_name_register);
         val _emailText : EditText= findViewById(R.id.input_email_register);
@@ -82,7 +87,17 @@ class RegisterActivity : AppCompatActivity() {
             {
                 // On complete call either onSignupSuccess or onSignupFailed
                 // depending on success
-                onSignupSuccess()
+                auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, OnCompleteListener{ task ->
+                    if(task.isSuccessful){
+                        Toast.makeText(this, "Registrace proběhla úspěšně", Toast.LENGTH_LONG).show()
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }else {
+                        Toast.makeText(this, "Registrace selhala", Toast.LENGTH_LONG).show()
+                    }
+                })
+                //onSignupSuccess()
                 // onSignupFailed();
                 progressDialog.dismiss()
             }, 3000
@@ -97,7 +112,7 @@ If registration was succesful create main activity
         val _signupButton : Button = findViewById(R.id.btn_register);
         _signupButton?.setEnabled(true)
         setResult(Activity.RESULT_OK, null)
-        intent  = Intent(this, MainActivity::class.java);
+        intent  = Intent(this, SignInActivity::class.java);
         startActivity(intent);
         finish()
     }

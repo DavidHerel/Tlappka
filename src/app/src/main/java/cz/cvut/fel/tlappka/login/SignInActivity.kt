@@ -11,9 +11,18 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
 import cz.cvut.fel.tlappka.MainActivity
 import cz.cvut.fel.tlappka.R
 import kotlinx.android.synthetic.main.activity_sign_in.*
+
 
 /*
 Activity that handles login of a user
@@ -22,11 +31,27 @@ class SignInActivity : AppCompatActivity() {
 
     private var TAG : String = "SignInActivity";
     private var REQUEST_SIGNUP : Int = 0;
+    private lateinit var auth: FirebaseAuth
+
+    private val RC_SIGN_IN = 1
+
+    var googleSignInClient: GoogleSignInClient? = null
+    lateinit var gso: GoogleSignInOptions
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)
+
+        //firebase acc
+        auth = FirebaseAuth.getInstance()
+
+        //gooogle
+        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         //find components
         val _loginButton : Button = findViewById(R.id.btn_login);
@@ -45,12 +70,15 @@ class SignInActivity : AppCompatActivity() {
             finish()
         }
 
+        link_forgot_password.setOnClickListener{
+            val intent = Intent(applicationContext, ForgotPasswordActivity::class.java);
+            startActivityForResult(intent, REQUEST_SIGNUP);
+        }
+
 
         _googleButton.setOnClickListener{
-            Intent(applicationContext, MainActivity::class.java).also {
-                startActivity(it)
-                finish()
-            }
+            signInToGoogle();
+
         };
 
 
@@ -70,7 +98,6 @@ Function handles login
             onLoginFailed()
             return
         }
-        _loginButton.isEnabled = false
 
     //create fancy process dialog
         val progressDialog = ProgressDialog(
@@ -85,8 +112,19 @@ Function handles login
         // TODO: There we will send email to password to Database/server where we will check if it matches
         Handler().postDelayed(
             {
+                auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, OnCompleteListener { task ->
+                    if(task.isSuccessful) {
+                        Toast.makeText(this, "Úspěšně přihlášen", Toast.LENGTH_LONG).show()
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }else {
+                        Toast.makeText(this, "Přihlášení se nezdařilo", Toast.LENGTH_LONG).show()
+                    }
+                })
+
                 //If datas match some data in databse then call onLoginSucces
-                onLoginSuccess()
+                //onLoginSuccess()
 
                 // If not clal onLoginFailed
                 // onLoginFailed();
@@ -109,6 +147,13 @@ If user is logged keep him logged
 // By default we just want to  finish the Activity and log them in automatically
                 finish()
             }
+        }
+
+        if (requestCode == RC_SIGN_IN) {
+            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleResult (task)
+        }else {
+            Toast.makeText(this, "Problem in execution order :(", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -160,6 +205,58 @@ If user is logged keep him logged
             _passwordText.error = null
         }
         return valid
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+        if(auth.currentUser == null){
+        }else{
+            Toast.makeText(this, "Úspěšně přihlášen jako " + auth.currentUser!!.email, Toast.LENGTH_LONG).show()
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        val alreadyloggedAccount = GoogleSignIn.getLastSignedInAccount(this)
+        if (alreadyloggedAccount != null) {
+            Toast.makeText(this, "Úspěšně přihlášen přes Google jako " + alreadyloggedAccount.email, Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else {
+        }
+    }
+
+    private fun configureGoogleClient() { // Configure Google Sign In
+        val gso =
+            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN) // for the requestIdToken, this is in the values.xml file that
+// is generated from your google-services.json
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+        // Build a GoogleSignInClient with the options specified by gso.
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        // Initialize Firebase Auth
+        auth = FirebaseAuth.getInstance()
+    }
+
+    fun signInToGoogle() {
+        val signInIntent: Intent = googleSignInClient!!.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+
+    private fun handleResult (completedTask: Task<GoogleSignInAccount>) {
+        try {
+            val account: GoogleSignInAccount? = completedTask.getResult(ApiException::class.java)
+            Toast.makeText(this, "Přihlášen přes google jako " + account!!.email, Toast.LENGTH_LONG).show()
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        } catch (e: ApiException) {
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
+        }
     }
 
 

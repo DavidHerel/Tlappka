@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cz.cvut.fel.tlappka">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,19 +11,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".home.PostRow"></activity>
+        <activity android:name=".login.ForgotPasswordActivity"></activity>
+        <activity android:name=".home.PostRow" />
         <activity android:name=".home.ContentHome" />
         <activity android:name=".login.RegisterActivity" />
         <activity android:name=".login.SignInActivity" />
         <activity android:name=".login.LoginActivity" />
-        <activity android:name=".onboarding.SplashActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".onboarding.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity"></activity>
         <activity android:name=".onboarding.OnboardingActivity" />
 
         <meta-data

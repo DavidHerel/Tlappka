@@ -1,18 +1,19 @@
 package cz.cvut.fel.tlappka.onboarding
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import android.preference.PreferenceManager
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
-import cz.cvut.fel.tlappka.MainActivity
 import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.login.LoginActivity
+import cz.cvut.fel.tlappka.login.SignInActivity
 import kotlinx.android.synthetic.main.activity_onboarding.*
+
 
 /**
  * Activity that handles onboarding through viewpager2
@@ -24,6 +25,14 @@ class OnboardingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
+
+        if (loadSavedPreferences()) { //kdyz jsem tu porpve ulozim ze jsem uz byl
+            savePreferences()
+        } else {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         //set up indicators (4 nowadays)
         layoutOnboardingIndicators = findViewById(R.id.layoutOnboardingIndicators);
@@ -149,6 +158,26 @@ class OnboardingActivity : AppCompatActivity() {
                 ))
             }
         }
+    }
+
+    /*
+Metoda ktera nacte jestli byl login rozkliknute poprve
+*/
+    private fun loadSavedPreferences(): Boolean {
+        val sharedPreferences =
+            PreferenceManager.getDefaultSharedPreferences(this)
+        return sharedPreferences.getBoolean("FirstLaunchOnboarding", true)
+    }
+
+    /*
+Ulozi flag,ze tato aktivita uz jednou zobrazena byla
+ */
+    private fun savePreferences() {
+        val sharedPreferences =
+            PreferenceManager.getDefaultSharedPreferences(this)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("FirstLaunchOnboarding", false)
+        editor.commit()
     }
 
 }

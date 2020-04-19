@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "420085086866",
+    "firebase_url": "https://tlappka-1586607408965.firebaseio.com",
+    "project_id": "tlappka-1586607408965",
+    "storage_bucket": "tlappka-1586607408965.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:420085086866:android:c5efca293ce3bc8e6b444b",
+        "android_client_info": {
+          "package_name": "cz.cvut.fel.tlappka"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "420085086866-a4a97vm8j19jp2k0p8fsvpfol2v05pfh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8qwTRidNWmXqCjgSH1TPmmjvOGEevXpw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "420085086866-a4a97vm8j19jp2k0p8fsvpfol2v05pfh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
