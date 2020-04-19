@@ -6,8 +6,11 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
+import cz.cvut.fel.tlappka.home.HomeFragment
 
 /**
  * A simple [Fragment] subclass.

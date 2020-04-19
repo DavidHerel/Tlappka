@@ -57,7 +57,10 @@ A SVÉ MAZLÍČKY</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="about_content">Zde bude text o aplikaci</string>
+    <string name="about_version">VERZE</string>
+    <string name="about_version_content">Tlappka, verze 1.0.1</string>
+    <string name="about_about_app">O APLIKACI</string>
+    <string name="about_content">Tlappka je aplikace, která sociálně propojuje majitele domácích mazlíčků. Sdílejte fotky nebo videa, zorganizujte události nebo procházky se svými přáteli a podívejte se, co je u Vašich přátel a jejich mazlíčků nového. Spojte se s lidmi ze svého okolí a zůstaňte aktivní díky procházkám!\n\nDoufáme, že jako uživatel Tlappky si hlavně užijete spoustu zábavy a najdete nové kamarády pro sebe i své mazlíčky.</string>
     <string name="help_content">Zde bude nápověda</string>
     <string name="setting_content">Zde bude nastavení</string>
     <string name="title_activity_settings">Settings</string>

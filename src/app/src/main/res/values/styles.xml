@@ -17,4 +17,15 @@
         <item name="android:layout_marginTop">60dp</item>
     </style>
 
+    <style name="about_title_style">
+        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/roboto</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:paddingTop">@dimen/toolbar_vertical_padding</item>
+        <item name="android:paddingBottom">@dimen/toolbar_vertical_padding</item>
+    </style>
+
 </resources>

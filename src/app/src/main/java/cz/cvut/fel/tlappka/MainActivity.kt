@@ -6,10 +6,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.DataBindingUtil.setContentView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import cz.cvut.fel.tlappka.databinding.ActivityMainBinding
 import cz.cvut.fel.tlappka.home.HomeFragment
@@ -22,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener {item->
+
         when(item.itemId) {
             R.id.nav_home -> {
                 replaceFragment(HomeFragment())
@@ -86,6 +90,11 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             // about
+            android.R.id.home -> {
+                Toast.makeText(applicationContext, "back", Toast.LENGTH_SHORT).show()
+                this.onBackPressed()
+                return true
+            }
             else -> {
                 val intent = Intent(this, AboutActivity::class.java)
                 startActivity(intent)
@@ -103,7 +112,10 @@ class MainActivity : AppCompatActivity() {
     private fun replaceFragment(fragment: Fragment) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.container, fragment)
+//        fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }
+
+
 
 }
