@@ -3,22 +3,20 @@ package cz.cvut.fel.tlappka
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.DataBindingUtil.setContentView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.FragmentActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import cz.cvut.fel.tlappka.databinding.ActivityMainBinding
 import cz.cvut.fel.tlappka.home.HomeFragment
 import cz.cvut.fel.tlappka.options.AboutActivity
 import cz.cvut.fel.tlappka.options.HelpActivity
 import cz.cvut.fel.tlappka.options.SettingsActivity
+import cz.cvut.fel.tlappka.profile.ProfileFragment
 
 class MainActivity : AppCompatActivity() {
 

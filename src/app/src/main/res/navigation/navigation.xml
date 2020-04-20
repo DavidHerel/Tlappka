@@ -31,7 +31,7 @@
         tools:layout="@layout/fragment_notifications" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="cz.cvut.fel.tlappka.ProfileFragment"
+        android:name="cz.cvut.fel.tlappka.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>
