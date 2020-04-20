@@ -11,7 +11,6 @@ import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.login.LoginActivity
-import cz.cvut.fel.tlappka.login.SignInActivity
 import kotlinx.android.synthetic.main.activity_onboarding.*
 
 
@@ -93,22 +92,22 @@ class OnboardingActivity : AppCompatActivity() {
         val onboardingItemFirst: OnboardingItem = OnboardingItem();
         onboardingItemFirst.title= resources.getString(R.string.onboarding_title_one);
         onboardingItemFirst.description = resources.getString(R.string.onboarding_desc_one);
-        onboardingItemFirst.image = R.drawable.onboarding_first;
+        onboardingItemFirst.image = R.drawable.onboarding01;
 
         val onboardingItemSecond: OnboardingItem = OnboardingItem();
         onboardingItemSecond.title= resources.getString(R.string.onboarding_title_two);
         onboardingItemSecond.description = resources.getString(R.string.onboarding_desc_two);
-        onboardingItemSecond.image = R.drawable.onboarding_second;
+        onboardingItemSecond.image = R.drawable.onboarding02;
 
         val onboardingItemThird: OnboardingItem = OnboardingItem();
         onboardingItemThird.title= resources.getString(R.string.onboarding_title_three);
         onboardingItemThird.description = resources.getString(R.string.onboarding_desc_three);
-        onboardingItemThird.image = R.drawable.onboarding_third;
+        onboardingItemThird.image = R.drawable.onboarding03;
 
         val onboardingItemFour: OnboardingItem = OnboardingItem();
         onboardingItemFour.title= resources.getString(R.string.onboarding_title_four);
         onboardingItemFour.description = resources.getString(R.string.onboarding_desc_four);
-        onboardingItemFour.image = R.drawable.onboarding_fourth;
+        onboardingItemFour.image = R.drawable.onboarding04;
 
 
         onboardingItems.add(onboardingItemFirst);
