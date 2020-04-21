@@ -211,7 +211,7 @@ podobně naladěné fajn lidské i psí kamarády."/>
         android:id="@+id/recyclerViewProfile"
         android:layout_width="match_parent"
         app:layout_constraintTop_toBottomOf="@id/profileInfo"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

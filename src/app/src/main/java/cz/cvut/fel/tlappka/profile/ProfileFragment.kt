@@ -35,7 +35,6 @@ class ProfileFragment : Fragment() {
 
         recyclerViewProfile.layoutManager = LinearLayoutManager(activity)
         recyclerViewProfile.adapter = PostsAdapter(posts, activity!!.applicationContext)
-
     }
 
 

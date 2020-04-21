@@ -26,7 +26,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/about_toolbar" />
+            app:layout_constraintTop_toBottomOf="@+id/about_background_img" />
 
         <TextView
             android:id="@+id/about_title_about"
@@ -66,6 +66,43 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/about_title_about" />
+
+        <ImageView
+            android:id="@+id/about_background_img"
+            android:layout_width="422dp"
+            android:layout_height="264dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/about_toolbar"
+            app:srcCompat="@drawable/welcome" />
+
+        <TextView
+            android:id="@+id/about_tlappka"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/roboto"
+            android:text="Tlappka"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="130dp"
+            android:layout_height="117dp"
+            android:paddingTop="@dimen/bottom_navi_icon_size"
+            android:paddingBottom="@dimen/bottom_navi_icon_size"
+            app:layout_constraintBottom_toTopOf="@+id/textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/about_background_img"
+            app:srcCompat="@drawable/ic_logo" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
