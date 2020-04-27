@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/relativeEdit1"
+    tools:context=".profile.EditProfileActivity">
+
+    <include layout="@layout/top_profile_edit_toolbar"/>
+
+    <ScrollView android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
+        android:layout_below="@id/relativeEdit1">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:padding="20dp">
+
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:id="@+id/profile_photo"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/profile_icon_example"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Změnit profilovou fotku"
+            android:id="@+id/changeProfilePhoto"
+            android:layout_below="@+id/profile_photo"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"/>
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_below="@+id/changeProfilePhoto"
+            android:layout_marginTop="30dp"
+            android:id="@+id/relLayout1">
+            <TextView
+                android:id="@+id/edit_text_name"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:text="Jméno"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_below="@id/edit_text_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/usernameProfileEdit"
+                android:layout_centerVertical="true"
+                android:inputType="text" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_below="@+id/relLayout1"
+            android:id="@+id/relLayout2"
+            android:layout_marginTop="15dp">
+
+            <TextView
+                android:id="@+id/edit_text_place"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:textSize="13sp"
+                android:text="Místo"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/placeProfileEdit"
+                android:layout_centerVertical="true"
+                android:layout_below="@id/edit_text_place"
+                android:inputType="textNoSuggestions"
+                android:hint="Místo"/>
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_below="@+id/relLayout2"
+            android:id="@+id/relLayout3"
+            android:layout_marginTop="15dp">
+
+            <TextView
+                android:id="@+id/edit_text_job"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:textSize="13sp"
+                android:text="Práce"/>
+
+            <EditText
+                android:layout_below="@id/edit_text_job"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/jobProfileEdit"
+                android:layout_centerVertical="true"
+                android:inputType="textNoSuggestions"
+                android:hint="Práce"/>
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_below="@+id/relLayout3"
+            android:id="@+id/relLayout4"
+            android:layout_marginTop="15dp">
+
+            <TextView
+                android:id="@+id/edit_text_hobbies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:layout_marginStart="5dp"
+                android:text="Koníčky"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/hobbiesProfileEdit"
+                android:layout_centerVertical="true"
+                android:layout_below="@id/edit_text_hobbies"
+                android:inputType="textNoSuggestions"
+                android:hint="Koníčky"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_below="@+id/relLayout4"
+            android:id="@+id/relLayout5"
+            android:layout_marginTop="15dp">
+
+            <TextView
+                android:layout_marginStart="5dp"
+                android:id="@+id/edit_text_about"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:text="O mě"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/aboutProfileEdit"
+                android:layout_below="@id/edit_text_about"
+                android:layout_centerVertical="true"
+                android:lines="3"
+                android:minLines="3"
+                android:maxLines="6"
+                android:hint="O mě"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+    </ScrollView>
+
+</RelativeLayout>

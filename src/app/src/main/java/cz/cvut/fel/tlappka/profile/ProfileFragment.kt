@@ -1,16 +1,25 @@
 package cz.cvut.fel.tlappka.profile
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.home.PostsAdapter
 import cz.cvut.fel.tlappka.home.model.Post
-import kotlinx.android.synthetic.main.activity_content_home.*
+import cz.cvut.fel.tlappka.model.User
 import kotlinx.android.synthetic.main.activity_content_profile.*
+import kotlinx.android.synthetic.main.activity_edit_profile.*
+import kotlinx.android.synthetic.main.top_profile_edit_toolbar.*
+
 
 /**
  * A simple [Fragment] subclass.
@@ -35,6 +44,49 @@ class ProfileFragment : Fragment() {
 
         recyclerViewProfile.layoutManager = LinearLayoutManager(activity)
         recyclerViewProfile.adapter = PostsAdapter(posts, activity!!.applicationContext)
+
+        FirebaseDatabase.getInstance().getReference("Users")
+            .child(FirebaseAuth.getInstance().currentUser!!.uid)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+
+                override fun onCancelled(p0: DatabaseError) {
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    val user = p0.getValue(User::class.java);
+                    val test = user?.name;
+                    nameTextView.setText(test);
+                }
+            })
+
+        //listener on edit
+        changeProfileButton.setOnClickListener(View.OnClickListener {
+            val intent = Intent(activity, EditProfileActivity::class.java)
+            startActivity(intent)
+        })
+
+        fillTexts();
+    }
+
+    fun fillTexts(){
+        FirebaseDatabase.getInstance().getReference("Users")
+            .child(FirebaseAuth.getInstance().currentUser!!.uid)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+
+                override fun onCancelled(p0: DatabaseError) {
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    val user = p0.getValue(User::class.java);
+                    val test = user?.name;
+                    nameTextView.setText(test);
+                    profilePlace.setText(user?.place);
+                    profileHobbies.setText(user?.hobbies);
+                    profileJob.setText(user?.job);
+                    profileAbout.setText(user?.about);
+
+                }
+            })
     }
 
 

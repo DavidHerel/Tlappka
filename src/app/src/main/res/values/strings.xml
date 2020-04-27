@@ -82,4 +82,7 @@ A SVÉ MAZLÍČKY</string>
     <string name="faq">FAQ</string>
     <string name="contact_us">CONTACT US</string>
 
+    <!-- Profile titles -->
+
+    <string name="profile_edit_profile">Upravit profil</string>
 </resources>

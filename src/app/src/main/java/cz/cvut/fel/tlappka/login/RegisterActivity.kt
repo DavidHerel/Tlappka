@@ -14,8 +14,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import cz.cvut.fel.tlappka.MainActivity
 import cz.cvut.fel.tlappka.R
+import cz.cvut.fel.tlappka.model.User
+import java.util.*
 
 /*
 Activity which is hadnling registers
@@ -67,7 +70,7 @@ class RegisterActivity : AppCompatActivity() {
             onSignupFailed()
             return
         }
-        _signupButton?.setEnabled(false)
+        //_signupButton?.setEnabled(false)
 
         //Fancy rogress bar
         val progressDialog = ProgressDialog(
@@ -89,7 +92,20 @@ class RegisterActivity : AppCompatActivity() {
                 // depending on success
                 auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, OnCompleteListener{ task ->
                     if(task.isSuccessful){
-                        Toast.makeText(this, "Registrace proběhla úspěšně", Toast.LENGTH_LONG).show()
+
+                        val user = User(name, Date(), "", email, "", "", "");
+                        FirebaseDatabase.getInstance().getReference("Users")
+                            .child(FirebaseAuth.getInstance().currentUser!!.uid)
+                            .setValue(user).addOnCompleteListener {
+                                if (task.isSuccessful){
+                                    Toast.makeText(this, "Zapsano do db", Toast.LENGTH_LONG).show()
+                                }else{
+                                    Toast.makeText(this, "Nezapsano do db", Toast.LENGTH_LONG).show()
+                                }
+                            };
+
+
+                        //Toast.makeText(this, "Registrace proběhla úspěšně", Toast.LENGTH_LONG).show()
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                         finish()

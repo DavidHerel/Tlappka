@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
 //                super.onOptionsItemSelected(item)
 //    }
 
-    private fun replaceFragment(fragment: Fragment) {
+    fun replaceFragment(fragment: Fragment) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.container, fragment)
 //        fragmentTransaction.addToBackStack(null)
