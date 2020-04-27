@@ -9,65 +9,153 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/general_space">
+
+        <!-- TODO: Replace with an expandable view -->
+        <LinearLayout
+            android:id="@+id/profile_photos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="@dimen/general_space"
+            app:layout_constraintEnd_toStartOf="@+id/activity_header"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:elevation="0dp"
+                app:cardCornerRadius="25dp"
+                android:layout_centerHorizontal="true"
+                android:shape="ring">
+
+                <ImageView
+                    android:id="@+id/user_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/activity_header"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/general_space"
+            android:layout_marginEnd="@dimen/general_space"
+            android:paddingBottom="@dimen/general_space"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/profile_photos"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/date_time"
+                style="@style/home_datetime_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date Time"
+                app:layout_constraintStart_toEndOf="@id/profile_photos"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toEndOf="@id/profile_photos"
+                app:layout_constraintTop_toBottomOf="@id/date_time">
+
+                <TextView
+                    android:id="@+id/username"
+                    style="@style/home_username_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="4sp"
+                    android:text="User"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/header_text"
+                    style="@style/home_text_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="4sp"
+                    android:text="Sample text here"
+                    app:layout_constraintStart_toEndOf="@id/username" />
+
+                <TextView
+                    android:id="@+id/with_users"
+                    style="@style/home_username_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="4sp"
+                    android:text="Other users"
+                    app:layout_constraintStart_toEndOf="@id/text" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/description"
+            style="@style/home_description_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/general_space"
+            android:layout_marginTop="@dimen/inside_posts_margin"
+            android:text="Activity description"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activity_header" />
 
         <ImageView
-            android:id="@+id/photo"
+            android:id="@+id/activity_content"
             android:layout_width="0dp"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            tools:src="@color/colorAccent"/>
-
-        <TextView
-            android:id="@+id/username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/general_space"
-            android:text="Sample text here"
-            app:layout_constraintTop_toBottomOf="@id/photo"/>
-
-        <TextView
-            android:id="@+id/text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/general_space"
-            app:layout_constraintTop_toBottomOf="@id/username"
-            tools:text="Description text"/>
-
-        <TextView
-            android:id="@+id/like"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/general_space"
-            android:text="Like"
-            app:layout_constraintEnd_toStartOf="@+id/comment"
-            app:layout_constraintHorizontal_bias="0.5"
+            android:layout_marginStart="@dimen/general_space"
+            android:layout_marginEnd="@dimen/general_space"
+            android:layout_marginTop="@dimen/inside_posts_margin"
+            android:layout_marginBottom="@dimen/inside_posts_margin"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/description"
+            tools:src="@color/colorAccent" />
+
+        <!-- TODO: Replace with an Image Button -->
+        <ImageView
+            android:id="@+id/like"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="@dimen/general_space"
+            android:layout_marginTop="@dimen/general_space"
+            android:layout_marginBottom="@dimen/general_space"
+            android:scaleType="fitCenter"
+            android:contentDescription="Tlapka"
+            app:layout_constraintEnd_toStartOf="@+id/comment"
+            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activity_content"
+            android:src="@drawable/ic_otlapkovani" />
+
+        <!-- TODO: Make an editable text view -->
         <TextView
             android:id="@+id/comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/general_space"
-            android:text="Koment"
-            app:layout_constraintEnd_toStartOf="@+id/share"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/like"
-            app:layout_constraintTop_toBottomOf="@id/text"/>
-
-        <TextView
-            android:id="@+id/share"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/general_space"
-            android:text="Sdílení"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_margin="@dimen/general_space"
+            android:padding="@dimen/basic_padding"
+            style="@style/home_comment_style"
+            android:text="Napiš komnetář."
+            android:background="@drawable/editable_round_corners"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/comment"
-            app:layout_constraintTop_toBottomOf="@id/text"/>
-
+            app:layout_constraintHorizontal_bias="0.8"
+            app:layout_constraintStart_toEndOf="@+id/like"
+            app:layout_constraintTop_toBottomOf="@id/activity_content" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

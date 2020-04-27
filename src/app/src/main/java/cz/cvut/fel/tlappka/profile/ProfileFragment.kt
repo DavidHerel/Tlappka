@@ -39,7 +39,11 @@ class ProfileFragment : Fragment() {
 
         val posts: ArrayList<Post> = ArrayList()
         for (i in 1..100) {
-            posts.add(Post("Lorem ipsum" + i, "Můj popisek", "https://picsum.photos/600/300?random&" + i))
+            posts.add(Post("14.3. 15:00", "Username" + i, ArrayList<String>(),
+                0, ArrayList<String>(),"1",
+                "Lorem ipsum" + i, "https://picsum.photos/600/300?random&" + (i*5),
+                "Popisek aktivity bude zde :)",
+                "https://picsum.photos/600/300?random&" + i))
         }
 
         recyclerViewProfile.layoutManager = LinearLayoutManager(activity)

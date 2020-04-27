@@ -28,4 +28,39 @@
         <item name="android:paddingBottom">@dimen/toolbar_vertical_padding</item>
     </style>
 
+    <style name="home_datetime_style">
+        <item name="android:textColor">@color/colorTextLightGrey</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/roboto_condensed_regular</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
+
+    <style name="home_text_style">
+        <item name="android:textColor">@color/colorTextBlack</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/roboto</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
+
+    <style name="home_username_style">
+        <item name="android:textColor">@color/colorTextBlack</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
+
+    <style name="home_description_style">
+        <item name="android:textColor">@color/colorTextBlack</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/roboto_regular_italic</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
+
+    <style name="home_comment_style">
+        <item name="android:textColor">@color/colorTextDarkGrey</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+
 </resources>
