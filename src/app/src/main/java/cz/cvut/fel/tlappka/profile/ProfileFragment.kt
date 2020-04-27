@@ -1,10 +1,12 @@
 package cz.cvut.fel.tlappka.profile
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
@@ -12,6 +14,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Picasso
 import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.home.PostsAdapter
 import cz.cvut.fel.tlappka.home.model.Post
@@ -70,6 +74,7 @@ class ProfileFragment : Fragment() {
         })
 
         fillTexts();
+        fillProfilePhoto();
     }
 
     fun fillTexts(){
@@ -92,6 +97,30 @@ class ProfileFragment : Fragment() {
                 }
             })
     }
+
+    fun fillProfilePhoto(){
+
+        //get storage ref
+        val storageRef = FirebaseStorage.getInstance()
+            .reference
+            .child("pics/${FirebaseAuth.getInstance().currentUser?.uid}/profilePic");
+
+
+        //fill photo
+        storageRef?.downloadUrl.addOnCompleteListener { urlTask ->
+            if(urlTask.isSuccessful) {
+                urlTask.result?.let {
+                    //display it
+                    val imageUri: Uri = it;
+                    Toast.makeText(activity, imageUri?.toString(), Toast.LENGTH_LONG).show()
+                    Picasso.with(activity).load(imageUri).into(profileIcon)
+                }
+            }else{
+                Toast.makeText(activity, "Chyba při načítání profilového obrázku", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
 
 
 }

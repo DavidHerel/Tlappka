@@ -85,7 +85,6 @@ class RegisterActivity : AppCompatActivity() {
         val email = _emailText!!.text.toString()
         val password = _passwordText!!.text.toString()
 
-        // TODO: There we will implement storing these DATAS to some Database (local/online)
         Handler().postDelayed(
             {
                 // On complete call either onSignupSuccess or onSignupFailed

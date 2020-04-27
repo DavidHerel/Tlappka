@@ -109,7 +109,6 @@ Function handles login
         progressDialog.show()
         val email = _emailText.text.toString()
         val password = _passwordText.text.toString()
-        // TODO: There we will send email to password to Database/server where we will check if it matches
         Handler().postDelayed(
             {
                 auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, OnCompleteListener { task ->
