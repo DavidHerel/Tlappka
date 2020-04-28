@@ -28,16 +28,37 @@ class PostContentHandler {
             assignWithUsersPhotos(range, with_users_photos)
         } else range = 0
 
+        val textAll: String = fillTextAll("Username" + idx, assignText(type_range), with_users)
+
         return Post(
-            getCurrentDateTime().toString("dd.MM HH:mm"), "Username" + idx,
+            getCurrentDateTime().toString("dd.MM. HH:mm"), "Username" + idx,
             with_users,
             with_users.size,
             with_users_photos,
             type_range.toString(), assignText(type_range),
             "https://picsum.photos/600/300?random&" + (idx*4),
             "Tady bude popis eventu nebo fotky :)",
-            "https://picsum.photos/600/300?random&" + idx
+            "https://picsum.photos/600/300?random&" + idx,
+            textAll
         )
+    }
+
+    fun fillTextAll(username: String, text: String, with_users: ArrayList<String>): String {
+        val sb = StringBuilder()
+        sb.append("<b>")
+        sb.append(username)
+        sb.append("</b> ")
+        sb.append(text)
+        if(with_users.size > 0) {
+            sb.append("<b>")
+            for(i in (0..(with_users.size-1))) {
+                sb.append(with_users[i])
+                if (i != (with_users.size-1)) sb.append(", ")
+            }
+            sb.append("</b>")
+        }
+        sb.append(".")
+        return sb.toString()
     }
 
     fun assignWithUsersPhotos(range: Int, list: ArrayList<String>) {
@@ -49,22 +70,13 @@ class PostContentHandler {
     fun assignText(type_id: Int): String {
         when (type_id) {
             TYPE_PHOTO -> {
-                return "přidal novou fotku."
+                return "přidal novou fotku"
             }
             TYPE_VIDEO -> {
-                return "přidal nové video."
+                return "přidal nové video"
             }
             TYPE_WALK -> {
-                return "byl na procházce s"
-                /*
-                val sb = StringBuilder()
-                sb.append("byl na procházce s ")
-                for (i in (0..with_users.size)) {
-                    sb.append(with_users[i])
-                    if (i != with_users.size) sb.append(", ")
-                    else sb.append(".")
-                }
-                return sb.toString() */
+                return "byl na procházce s "
             }
         }
         return "přidal novou fotku."

@@ -11,4 +11,7 @@ data class Post(
     val text: String,
     val user_photo: String,
     val description: String,
-    val activity_content: String)
+    val activity_content: String,
+    val text_all: String)
+
+    //TODO complete more details: num likes, comments etc

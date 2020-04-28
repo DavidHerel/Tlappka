@@ -42,12 +42,14 @@ class ProfileFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         val posts: ArrayList<Post> = ArrayList()
+        //TODO connect to PostContentHandler & DB
         for (i in 1..100) {
             posts.add(Post("14.3. 15:00", "Username" + i, ArrayList<String>(),
                 0, ArrayList<String>(),"1",
                 "Lorem ipsum" + i, "https://picsum.photos/600/300?random&" + (i*5),
                 "Popisek aktivity bude zde :)",
-                "https://picsum.photos/600/300?random&" + i))
+                "https://picsum.photos/600/300?random&" + i,
+                "Username" + i + " Lorem ipsum" + i))
         }
 
         recyclerViewProfile.layoutManager = LinearLayoutManager(activity)

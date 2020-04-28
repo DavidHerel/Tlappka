@@ -8,6 +8,6 @@ class PostRow : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_post_row)
+        setContentView(R.layout.activity_post_row_newsfeed)
     }
 }

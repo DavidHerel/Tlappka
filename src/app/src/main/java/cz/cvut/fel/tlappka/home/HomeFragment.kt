@@ -8,6 +8,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.cvut.fel.tlappka.R
+import cz.cvut.fel.tlappka.databinding.ActivityMainBinding
 import cz.cvut.fel.tlappka.home.model.Post
 import cz.cvut.fel.tlappka.home.model.PostContentHandler
 import kotlinx.android.synthetic.main.activity_content_home.*
@@ -22,12 +23,6 @@ import kotlin.random.Random.Default.nextInt
  * A simple [Fragment] subclass.
  */
 class HomeFragment : Fragment() {
-
-    companion object {
-        const val TYPE_PHOTO: Int = 0
-        const val TYPE_VIDEO: Int = 1
-        const val TYPE_WALK: Int = 2
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

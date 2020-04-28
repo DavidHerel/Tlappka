@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/general_space">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/general_space">
+
+        <!-- TODO: Replace with an expandable view = recycler view -->
+        <LinearLayout
+            android:id="@+id/profile_photos"
+            app:layout_constraintEnd_toStartOf="@+id/activity_header"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/general_space"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                app:cardCornerRadius="25dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:elevation="0dp"
+                android:shape="oval">
+
+                <ImageView
+                    android:id="@+id/user_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/activity_header"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/profile_photos"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/general_space"
+            android:layout_marginEnd="@dimen/general_space"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/inside_posts_margin">
+
+            <TextView
+                android:id="@+id/date_time"
+                style="@style/home_datetime_style"
+                app:layout_constraintStart_toEndOf="@id/profile_photos"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-2dp"
+                android:gravity="top"
+                android:includeFontPadding="false"
+                android:text="Date Time" />
+
+            <TextView
+                android:id="@+id/text_all"
+                style="@style/home_text_style"
+                app:layout_constraintBottom_toBottomOf="@id/profile_photos"
+                app:layout_constraintStart_toEndOf="@id/profile_photos"
+                app:layout_constraintTop_toBottomOf="@id/date_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="2dp"
+                android:text="The complete description will be here" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/description"
+            style="@style/home_description_style"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profile_photos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/general_space"
+            android:layout_marginTop="@dimen/inside_posts_margin"
+            android:text="Activity description" />
+
+        <ImageView
+            android:id="@+id/activity_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/description"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_marginStart="@dimen/general_space"
+            android:layout_marginTop="@dimen/inside_posts_margin"
+            android:layout_marginEnd="@dimen/general_space"
+            android:layout_marginBottom="@dimen/inside_posts_margin"
+            android:scaleType="centerCrop"
+            tools:src="@color/colorAccent" />
+
+        <LinearLayout
+            android:id="@+id/num_likes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/general_space"
+            app:layout_constraintTop_toBottomOf="@id/activity_content"
+            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/num_likes_image"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_otlakovani_mywall"/>
+
+            <TextView
+                android:id="@+id/posted_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/activity_content"
+                app:layout_constraintStart_toStartOf="@id/comment"
+                style="@style/home_text_style"
+                android:text="Ty a 3 lidé to tlapkují"
+                />
+
+        </LinearLayout>
+
+        <!-- TODO: Add view for the posted comment after commenting through this page -->
+        <!-- needs to be set visible and filled with content after confirm_comment is used -->
+        <ImageButton
+            android:id="@+id/like"
+            app:layout_constraintEnd_toStartOf="@+id/comment"
+            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/num_likes"
+            android:shape="oval"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="@dimen/general_space"
+            android:layout_marginTop="@dimen/general_space"
+            android:layout_marginBottom="@dimen/general_space"
+            android:contentDescription="Tlapka"
+            android:scaleType="fitCenter"
+            android:background="@drawable/imagebutton_like_active"
+            android:elevation="@dimen/button_anim_default"
+            android:stateListAnimator="@animator/anim_button"
+            android:src="@drawable/ic_otlapkovani_active" />
+
+        <EditText
+            android:id="@+id/comment"
+            style="@style/home_comment_style"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/general_space"
+            android:background="@drawable/editable_round_corners"
+            android:hint="Napiš komentář."
+            android:inputType="textMultiLine|text|textCapSentences"
+            android:padding="@dimen/basic_padding"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.8"
+            app:layout_constraintStart_toEndOf="@+id/like"
+            app:layout_constraintTop_toBottomOf="@id/num_likes" />
+
+        <!-- TODO: Used for comment posting confirmation -->
+        <!-- needs to be set visible when EditText is active, then invisible again -->
+        <Button
+            android:id="@+id/confirm_comment"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:fontFamily="@font/roboto"
+            app:layout_constraintBottom_toBottomOf="@+id/comment"
+            app:layout_constraintEnd_toEndOf="@id/comment"
+            android:visibility="gone"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

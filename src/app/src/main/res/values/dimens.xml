@@ -11,4 +11,6 @@
     <dimen name="toolbar_height">56dp</dimen>
 
     <dimen name="inside_posts_margin">8dp</dimen>
+    <dimen name="button_anim_default">4dp</dimen>
+    <dimen name="button_anim_pressed">1dp</dimen>
 </resources>
