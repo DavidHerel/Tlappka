@@ -53,21 +53,7 @@ class ProfileFragment : Fragment() {
         }
 
         recyclerViewProfile.layoutManager = LinearLayoutManager(activity)
-        recyclerViewProfile.adapter = PostsAdapter(posts, activity!!.applicationContext)
-
-        FirebaseDatabase.getInstance().getReference("Users")
-            .child(FirebaseAuth.getInstance().currentUser!!.uid)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-
-                override fun onCancelled(p0: DatabaseError) {
-                }
-
-                override fun onDataChange(p0: DataSnapshot) {
-                    val user = p0.getValue(User::class.java);
-                    val test = user?.name;
-                    nameTextView.setText(test);
-                }
-            })
+        recyclerViewProfile.adapter = PostsAdapter(posts, requireActivity().applicationContext)
 
         //listener on edit
         changeProfileButton.setOnClickListener(View.OnClickListener {
@@ -75,6 +61,12 @@ class ProfileFragment : Fragment() {
             startActivity(intent)
         })
 
+        fillTexts();
+        fillProfilePhoto();
+    }
+
+    override fun onResume() {
+        super.onResume()
         fillTexts();
         fillProfilePhoto();
     }
