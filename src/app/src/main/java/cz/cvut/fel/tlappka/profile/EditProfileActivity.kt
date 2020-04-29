@@ -9,7 +9,10 @@ import android.provider.MediaStore
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -19,16 +22,17 @@ import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.model.User
+import kotlinx.android.synthetic.main.activity_content_profile.*
 import kotlinx.android.synthetic.main.activity_edit_profile.*
 import java.io.ByteArrayOutputStream
+import java.util.*
 
 
 class EditProfileActivity : AppCompatActivity() {
+    private val profileFragmentViewModel: ProfileFragmentViewModel by viewModels()
+
     //just to track the call
     private val REQUEST_IMAGE_CAPTURE = 100;
-
-    //upload into firebase storage
-    private lateinit var imageUri : Uri;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,46 +41,24 @@ class EditProfileActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.profileEditToolBar));
 
         fillTexts();
+        fillProfilePhoto();
     }
 
     fun fillTexts(){
-        FirebaseDatabase.getInstance().getReference("Users")
-            .child(FirebaseAuth.getInstance().currentUser!!.uid)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
+        profileFragmentViewModel.getUser().observe(this) { user ->
+            // update UI
+            usernameProfileEdit.setText(user?.name);
+            placeProfileEdit.setText(user?.place);
+            hobbiesProfileEdit.setText(user?.hobbies);
+            jobProfileEdit.setText(user?.job);
+            aboutProfileEdit.setText(user?.about);
+        }
+    }
 
-                override fun onCancelled(p0: DatabaseError) {
-                }
-
-                override fun onDataChange(p0: DataSnapshot) {
-                    val user = p0.getValue(User::class.java);
-                    val test = user?.name;
-                    usernameProfileEdit.setText(test);
-                    placeProfileEdit.setText(user?.place);
-                    hobbiesProfileEdit.setText(user?.hobbies);
-                    jobProfileEdit.setText(user?.job);
-                    aboutProfileEdit.setText(user?.about);
-
-                }
-            })
-
-        //get storage ref
-        val storageRef = FirebaseStorage.getInstance()
-            .reference
-            .child("pics/${FirebaseAuth.getInstance().currentUser?.uid}/profilePic");
-
-
-        //fill photo
-        storageRef.downloadUrl.addOnCompleteListener { urlTask ->
-            if(urlTask.isSuccessful) {
-                urlTask.result?.let {
-                    //display it
-                    imageUri = it;
-                    Toast.makeText(this, imageUri.toString(), Toast.LENGTH_LONG).show()
-                    Picasso.with(this).load(imageUri).into(profile_photo_edit)
-                }
-            }else{
-                Toast.makeText(this, "Chyba při načítání profilového obrázku", Toast.LENGTH_LONG).show()
-            }
+    fun fillProfilePhoto(){
+        profileFragmentViewModel.getUri().observe(this) { uri ->
+            // update UI
+            Picasso.with(this).load(uri).into(profile_photo_edit)
         }
     }
 
@@ -84,22 +66,24 @@ class EditProfileActivity : AppCompatActivity() {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.layout_click));
         finish();
     }
-    //save data
+
+    override fun onResume() {
+        super.onResume()
+        fillTexts();
+        fillProfilePhoto();
+    }
+
+    //update data
     fun doneEditProfileButton(view: View) {
-        FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().currentUser!!.uid)
-            .child("about").setValue(aboutProfileEdit.text.toString());
-        FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().currentUser!!.uid)
-            .child("hobbies").setValue(hobbiesProfileEdit.text.toString());
-        FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().currentUser!!.uid)
-            .child("job").setValue(jobProfileEdit.text.toString());
-        FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().currentUser!!.uid)
-            .child("name").setValue(usernameProfileEdit.text.toString());
-        FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().currentUser!!.uid)
-            .child("place").setValue(placeProfileEdit.text.toString());
+        var user = User();
+        user.name = usernameProfileEdit.text.toString();
+        user.about = aboutProfileEdit.text.toString();
+        user.hobbies = hobbiesProfileEdit.text.toString();
+        user.job = jobProfileEdit.text.toString();
+        user.place = placeProfileEdit.text.toString();
+        profileFragmentViewModel.updateUser(user);
 
-        Toast.makeText(this, "Změny uloženy", Toast.LENGTH_LONG).show()
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.layout_click));
-
         finish();
     }
 
@@ -128,49 +112,7 @@ class EditProfileActivity : AppCompatActivity() {
             //pic from camera
             val imageBitmap = data?.extras?.get("data") as Bitmap
 
-            uploadImageAndSaveUri(imageBitmap);
-        }
-    }
-
-    //saving camera pic
-    private fun uploadImageAndSaveUri(bitmap : Bitmap){
-        val baos = ByteArrayOutputStream();
-
-        //get storage ref
-        val storageRef = FirebaseStorage.getInstance()
-            .reference
-            .child("pics/${FirebaseAuth.getInstance().currentUser?.uid}/profilePic");
-
-        //compress (100 means best image quality, 0 means worst)
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
-        val image = baos.toByteArray();
-
-        //put it in storage database
-        val upload = storageRef.putBytes(image);
-
-        //when uploaded
-        upload.addOnCompleteListener{ uploadTask ->
-            if (uploadTask.isSuccessful){
-
-                //download profile pic
-                storageRef.downloadUrl.addOnCompleteListener { urlTask ->
-                    if (urlTask.isSuccessful) {
-                        urlTask.result?.let {
-                            //display it
-                            imageUri = it;
-                            Toast.makeText(this, imageUri.toString(), Toast.LENGTH_LONG).show()
-                            profile_photo_edit.setImageBitmap(bitmap);
-                        }
-                    }else{
-                        Toast.makeText(this, "Chyba při načítání profilového obrázku", Toast.LENGTH_LONG).show()
-                    }
-
-                }
-            }else{
-                uploadTask.exception?.let {
-                    Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
-                }
-            }
+            profileFragmentViewModel.saveImage(imageBitmap);
         }
     }
 }

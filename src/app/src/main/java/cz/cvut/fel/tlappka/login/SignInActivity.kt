@@ -5,6 +5,7 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.provider.FontsContract
 import android.util.Patterns
 import android.view.View
 import android.widget.Button
@@ -189,6 +190,11 @@ class SignInActivity : AppCompatActivity() {
     private fun signInWithGoogle(googleAuthCredential: AuthCredential) {
         auth.signInWithCredential(googleAuthCredential).addOnCompleteListener(this) { authTask ->
             if(authTask.isSuccessful){
+                //TODO - if UUID is in database - just login
+                // if not in database - register
+                //TODO - make it AS MVVM
+
+                /*
                 val user =
                     auth.currentUser?.displayName?.let { auth.currentUser?.email?.let { it1 ->
                         User(it, Date(), "",
@@ -206,6 +212,7 @@ class SignInActivity : AppCompatActivity() {
                             Toast.makeText(this, "Nezapsano pres google do db", Toast.LENGTH_LONG).show()
                         }
                     };
+                */
             }else{
 
             }

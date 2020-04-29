@@ -8,6 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -29,6 +32,7 @@ import kotlinx.android.synthetic.main.top_profile_edit_toolbar.*
  * A simple [Fragment] subclass.
  */
 class ProfileFragment : Fragment() {
+    private val profileFragmentViewModel: ProfileFragmentViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,14 +59,15 @@ class ProfileFragment : Fragment() {
         recyclerViewProfile.layoutManager = LinearLayoutManager(activity)
         recyclerViewProfile.adapter = PostsAdapter(posts, requireActivity().applicationContext)
 
+        initChangeProfileButton();
+    }
+
+    private fun initChangeProfileButton() {
         //listener on edit
         changeProfileButton.setOnClickListener(View.OnClickListener {
             val intent = Intent(activity, EditProfileActivity::class.java)
             startActivity(intent)
         })
-
-        fillTexts();
-        fillProfilePhoto();
     }
 
     override fun onResume() {
@@ -71,48 +76,32 @@ class ProfileFragment : Fragment() {
         fillProfilePhoto();
     }
 
-    fun fillTexts(){
-        FirebaseDatabase.getInstance().getReference("Users")
-            .child(FirebaseAuth.getInstance().currentUser!!.uid)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
+    //everytime the user profile data are updated -> UI refreshed
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        fillTexts();
+        fillProfilePhoto();
+    }
 
-                override fun onCancelled(p0: DatabaseError) {
-                }
-
-                override fun onDataChange(p0: DataSnapshot) {
-                    val user = p0.getValue(User::class.java);
-                    val test = user?.name;
-                    nameTextView.setText(test);
-                    profilePlace.setText(user?.place);
-                    profileHobbies.setText(user?.hobbies);
-                    profileJob.setText(user?.job);
-                    profileAbout.setText(user?.about);
-
-                }
-            })
+    private fun fillTexts(){
+        profileFragmentViewModel.getUser().observe(viewLifecycleOwner) { user ->
+            // update UI
+            nameTextView.text = user?.name;
+            profilePlace.text = user?.place;
+            profileHobbies.text = user?.hobbies;
+            profileJob.text = user?.job;
+            profileAbout.text = user?.about;
+        }
     }
 
     fun fillProfilePhoto(){
-
-        //get storage ref
-        val storageRef = FirebaseStorage.getInstance()
-            .reference
-            .child("pics/${FirebaseAuth.getInstance().currentUser?.uid}/profilePic");
-
-
-        //fill photo
-        storageRef?.downloadUrl.addOnCompleteListener { urlTask ->
-            if(urlTask.isSuccessful) {
-                urlTask.result?.let {
-                    //display it
-                    val imageUri: Uri = it;
-                    Toast.makeText(activity, imageUri?.toString(), Toast.LENGTH_LONG).show()
-                    Picasso.with(activity).load(imageUri).into(profileIcon)
-                }
-            }else{
-                Toast.makeText(activity, "Chyba při načítání profilového obrázku", Toast.LENGTH_LONG).show()
-            }
+        profileFragmentViewModel.getUri().observe(viewLifecycleOwner) { uri ->
+            // update UI
+            Picasso.with(activity).load(uri).into(profileIcon)
         }
+
+
+
     }
 
 
