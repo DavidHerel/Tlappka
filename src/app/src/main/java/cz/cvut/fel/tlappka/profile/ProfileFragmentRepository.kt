@@ -15,8 +15,8 @@ import cz.cvut.fel.tlappka.model.User
 import kotlinx.android.synthetic.main.activity_content_profile.*
 import kotlinx.android.synthetic.main.activity_edit_profile.*
 import java.io.ByteArrayOutputStream
-
 class ProfileFragmentRepository {
+
     fun getUser(): MutableLiveData<User> {
         var data : MutableLiveData<User> = MutableLiveData<User>();
         FirebaseDatabase.getInstance().getReference("Users")
@@ -54,9 +54,10 @@ class ProfileFragmentRepository {
         return data
     }
 
-    fun saveImage(bitmap : Bitmap){
+    fun saveImage(bitmap : Bitmap) : MutableLiveData<Boolean>{
+        var data : MutableLiveData<Boolean> = MutableLiveData<Boolean>();
         val baos = ByteArrayOutputStream();
-
+        data.value = false;
         //get storage ref
         val storageRef = FirebaseStorage.getInstance()
             .reference
@@ -72,12 +73,14 @@ class ProfileFragmentRepository {
         //when uploaded
         upload.addOnCompleteListener{ uploadTask ->
             if (uploadTask.isSuccessful){
-
+                data.value = true;
             }else{
                 uploadTask.exception?.let {
+                    data.value = false;
                 }
             }
         }
+        return data;
     }
 
     fun updateUser(user : User){
@@ -91,5 +94,6 @@ class ProfileFragmentRepository {
             .child("name").setValue(user.name);
         FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().currentUser!!.uid)
             .child("place").setValue(user.place);
+
     }
 }

@@ -8,9 +8,10 @@ import androidx.lifecycle.ViewModel
 import cz.cvut.fel.tlappka.model.User
 
 class ProfileFragmentViewModel : ViewModel() {
-    val profileFragmentRepository : ProfileFragmentRepository = ProfileFragmentRepository();
-    private lateinit var mUser : MutableLiveData<User>;
-    private lateinit var mUri : MutableLiveData<Uri>;
+    private val profileFragmentRepository : ProfileFragmentRepository = ProfileFragmentRepository();
+    private var mUser = MutableLiveData<User>();
+    private var mUri = MutableLiveData<Uri>();
+    private var isDoneSaving = MutableLiveData<Boolean>();
 
     fun getUser() : LiveData<User>{
         mUser = profileFragmentRepository.getUser();
@@ -22,12 +23,15 @@ class ProfileFragmentViewModel : ViewModel() {
         return mUri;
     }
 
-    fun saveImage(bitmap : Bitmap){
-        profileFragmentRepository.saveImage(bitmap);
+    fun saveImage(bitmap : Bitmap) : LiveData<Boolean>{
+        isDoneSaving = profileFragmentRepository.saveImage(bitmap);
+        return isDoneSaving;
+
     }
 
     fun updateUser(user : User){
         profileFragmentRepository.updateUser(user);
+        mUser = profileFragmentRepository.getUser();
     }
 
 }

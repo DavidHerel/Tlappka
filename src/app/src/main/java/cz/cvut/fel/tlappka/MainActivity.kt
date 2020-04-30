@@ -11,8 +11,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import cz.cvut.fel.tlappka.databinding.ActivityMainBinding
 import cz.cvut.fel.tlappka.home.HomeFragment
+import cz.cvut.fel.tlappka.login.SignInActivity
 import cz.cvut.fel.tlappka.options.AboutActivity
 import cz.cvut.fel.tlappka.options.HelpActivity
 import cz.cvut.fel.tlappka.options.SettingsActivity
@@ -85,6 +87,11 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.help_item -> {
                 val intent = Intent(this, HelpActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.sign_out_item -> {
+                FirebaseAuth.getInstance().signOut();
+                val intent = Intent(this, SignInActivity::class.java)
                 startActivity(intent)
             }
             // about

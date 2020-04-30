@@ -27,14 +27,14 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import cz.cvut.fel.tlappka.MainActivity
 import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.model.User
 import kotlinx.android.synthetic.main.activity_sign_in.*
 import java.util.*
 
-
+//TODO - make it as MVVM (register activity too)
 /*
 Activity that handles login of a user
  */
@@ -158,7 +158,7 @@ class SignInActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == Activity.RESULT_OK) { // TODO: Need to check if user didnt signed out
-                finish()
+
             }
         }
 
@@ -190,39 +190,54 @@ class SignInActivity : AppCompatActivity() {
     private fun signInWithGoogle(googleAuthCredential: AuthCredential) {
         auth.signInWithCredential(googleAuthCredential).addOnCompleteListener(this) { authTask ->
             if(authTask.isSuccessful){
-                //TODO - if UUID is in database - just login
-                // if not in database - register
                 //TODO - make it AS MVVM
+                val fireRef : DatabaseReference = FirebaseDatabase.getInstance().getReference("Users");
+                fireRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {
 
-                /*
-                val user =
-                    auth.currentUser?.displayName?.let { auth.currentUser?.email?.let { it1 ->
-                        User(it, Date(), "",
-                            it1, "", "", "")
-                    } };
-                FirebaseDatabase.getInstance().getReference("Users")
-                    .child(FirebaseAuth.getInstance().currentUser!!.uid)
-                    .setValue(user).addOnCompleteListener {task2 ->
-                        if (task2.isSuccessful){
-                            Toast.makeText(this, "Zapsano pres google do db", Toast.LENGTH_LONG).show()
-                            val intent = Intent(this, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        }else{
-                            Toast.makeText(this, "Nezapsano pres google do db", Toast.LENGTH_LONG).show()
+                    }
+
+                    override fun onDataChange(p0: DataSnapshot) {
+                        var wasInDb = false;
+                        if (p0.exists()) {
+                            val i = 0;
+                            for (d in p0.children) {
+                                //uuid in database
+                                if(auth.currentUser?.uid == d.key){
+                                    wasInDb = true;
+                                    break;
+                                }
+                            }
                         }
-                    };
-                */
-            }else{
-
+                        //was in DB
+                        if (wasInDb){
+                            //just login
+                            startMainActity();
+                        }else{
+                            //not was in db
+                            //create new
+                            val user =
+                                auth.currentUser?.displayName?.let { auth.currentUser?.email?.let { it1 ->
+                                    User(it, Date(), "",
+                                        it1, "", "", "")
+                                } };
+                            FirebaseDatabase.getInstance().getReference("Users")
+                                .child(FirebaseAuth.getInstance().currentUser!!.uid)
+                                .setValue(user).addOnCompleteListener {task2 ->
+                                    if (task2.isSuccessful){
+                                        startMainActity();
+                                    }else{
+                                    }
+                                };
+                        }
+                    }
+                })
             }
 
         }
     }
 
-    private fun createNewUser(authenticatedUser: User?) {
-        
-
+    private fun startMainActity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
@@ -274,15 +289,6 @@ class SignInActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
-        }
-
-        val alreadyloggedAccount = GoogleSignIn.getLastSignedInAccount(this)
-        if (alreadyloggedAccount != null) {
-            Toast.makeText(this, "Úspěšně přihlášen přes Google jako " + alreadyloggedAccount.email, Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
-        } else {
         }
     }
 

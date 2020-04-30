@@ -3,7 +3,7 @@ package cz.cvut.fel.tlappka.profile
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.net.Uri
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
@@ -11,21 +11,12 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.model.User
-import kotlinx.android.synthetic.main.activity_content_profile.*
 import kotlinx.android.synthetic.main.activity_edit_profile.*
 import java.io.ByteArrayOutputStream
-import java.util.*
 
 
 class EditProfileActivity : AppCompatActivity() {
@@ -55,7 +46,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
-    fun fillProfilePhoto(){
+    private fun fillProfilePhoto(){
         profileFragmentViewModel.getUri().observe(this) { uri ->
             // update UI
             Picasso.with(this).load(uri).into(profile_photo_edit)
@@ -67,11 +58,6 @@ class EditProfileActivity : AppCompatActivity() {
         finish();
     }
 
-    override fun onResume() {
-        super.onResume()
-        fillTexts();
-        fillProfilePhoto();
-    }
 
     //update data
     fun doneEditProfileButton(view: View) {
@@ -83,8 +69,15 @@ class EditProfileActivity : AppCompatActivity() {
         user.place = placeProfileEdit.text.toString();
         profileFragmentViewModel.updateUser(user);
 
-        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.layout_click));
-        finish();
+        //TODO - now it passes to next activity only when it is succesfuly uploaded (so without internet connections it does nothing, just
+        // stores in db after device gets online) (also all text fields when offline come blank so blank text fields are stored)
+        profileFragmentViewModel.saveImage((profile_photo_edit.getDrawable() as BitmapDrawable).bitmap).observe(this){
+            if (it){
+                view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.layout_click));
+                finish();
+            }
+        }
+
     }
 
     fun changeProfilePicButton(view: View) {
@@ -111,8 +104,10 @@ class EditProfileActivity : AppCompatActivity() {
 
             //pic from camera
             val imageBitmap = data?.extras?.get("data") as Bitmap
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 80, ByteArrayOutputStream());
+            profile_photo_edit.setImageBitmap(imageBitmap);
 
-            profileFragmentViewModel.saveImage(imageBitmap);
+
         }
     }
 }

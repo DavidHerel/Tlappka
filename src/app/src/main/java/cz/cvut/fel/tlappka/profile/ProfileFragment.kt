@@ -26,6 +26,7 @@ import cz.cvut.fel.tlappka.model.User
 import kotlinx.android.synthetic.main.activity_content_profile.*
 import kotlinx.android.synthetic.main.activity_edit_profile.*
 import kotlinx.android.synthetic.main.top_profile_edit_toolbar.*
+import java.lang.Thread.sleep
 
 
 /**
@@ -58,7 +59,6 @@ class ProfileFragment : Fragment() {
 
         recyclerViewProfile.layoutManager = LinearLayoutManager(activity)
         recyclerViewProfile.adapter = PostsAdapter(posts, requireActivity().applicationContext)
-
         initChangeProfileButton();
     }
 
@@ -83,6 +83,7 @@ class ProfileFragment : Fragment() {
         fillProfilePhoto();
     }
 
+
     private fun fillTexts(){
         profileFragmentViewModel.getUser().observe(viewLifecycleOwner) { user ->
             // update UI
@@ -94,16 +95,22 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    fun fillProfilePhoto(){
+    private fun fillProfilePhoto(){
         profileFragmentViewModel.getUri().observe(viewLifecycleOwner) { uri ->
             // update UI
             Picasso.with(activity).load(uri).into(profileIcon)
         }
 
 
-
     }
 
+    private fun hideProgressBar() {
+        profileProgressBar.visibility = View.VISIBLE;
+    }
+
+    private fun showProgressBar() {
+        profileProgressBar.visibility = View.GONE;
+    }
 
 
 }
