@@ -1,14 +1,20 @@
 package cz.cvut.fel.tlappka.profile
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.os.Environment.getExternalStorageDirectory
 import android.provider.MediaStore
+import android.view.Menu
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.observe
@@ -17,6 +23,7 @@ import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.model.User
 import kotlinx.android.synthetic.main.activity_edit_profile.*
 import java.io.ByteArrayOutputStream
+import java.io.File
 
 
 class EditProfileActivity : AppCompatActivity() {
@@ -24,6 +31,7 @@ class EditProfileActivity : AppCompatActivity() {
 
     //just to track the call
     private val REQUEST_IMAGE_CAPTURE = 100;
+    private val REQUEST_GALLERY = 200;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,31 +91,61 @@ class EditProfileActivity : AppCompatActivity() {
     fun changeProfilePicButton(view: View) {
         view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.layout_click));
 
-        takePictureIntent();
+        //takePictureIntent();
+        selectImage();
     }
 
     //open camera intent
     private fun takePictureIntent(){
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also{ pictureIntent->
-            pictureIntent.resolveActivity(this?.packageManager!!)?.also{
-                startActivityForResult(pictureIntent, REQUEST_IMAGE_CAPTURE)
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.resolveActivity(packageManager)?.also {
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
             }
-
         }
+    }
+
+    //open camera intent
+    private fun getGalleryIntent(){
+        val intent = Intent(
+            Intent.ACTION_PICK,
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        )
+        startActivityForResult(intent, REQUEST_GALLERY)
     }
 
     //get pic from camera
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK){
+        if(resultCode == Activity.RESULT_OK) {
 
-            //pic from camera
-            val imageBitmap = data?.extras?.get("data") as Bitmap
-            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 80, ByteArrayOutputStream());
-            profile_photo_edit.setImageBitmap(imageBitmap);
-
-
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                //pic from camera
+                val imageBitmap = data?.extras?.get("data") as Bitmap
+                profile_photo_edit.setImageBitmap(imageBitmap)
+            }else  if (requestCode == REQUEST_GALLERY){
+                val uri = data?.data;
+                //photo from gallery
+                profile_photo_edit.setImageURI(data?.data)
+            }
         }
     }
+
+    private fun selectImage() {
+        val options =
+            arrayOf<CharSequence>("Vyfotit", "Vybrat z galerie", "Zrušit")
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this@EditProfileActivity)
+        builder.setTitle("Přidat fotku")
+        builder.setItems(options, DialogInterface.OnClickListener { dialog, item ->
+            if (options[item] == "Vyfotit") {
+                takePictureIntent();
+            } else if (options[item] == "Vybrat z galerie") {
+                getGalleryIntent();
+            } else if (options[item] == "Zrušit") {
+                dialog.dismiss()
+            }
+        })
+        builder.show()
+    }
+
 }
