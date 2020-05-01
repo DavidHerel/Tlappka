@@ -9,6 +9,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="general_space">12dp</dimen>
     <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="settings_items_padding">20dp</dimen>
 
     <dimen name="inside_posts_margin">8dp</dimen>
     <dimen name="button_anim_default">4dp</dimen>

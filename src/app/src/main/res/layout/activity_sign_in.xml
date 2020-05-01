@@ -72,14 +72,15 @@
             android:gravity="center"
             android:textSize="16dip"/>
 
-        <TextView android:id="@+id/link_forgot_password"
+        <TextView
+            android:id="@+id/link_forgot_password"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="Zapomněli jste heslo?"
-            android:textColor="@color/colorTextPrimary"
             android:gravity="center"
-            android:textSize="16dip"/>
+            android:text="@string/forgotten_password"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="16dip" />
 
 
 

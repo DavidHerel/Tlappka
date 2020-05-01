@@ -8,7 +8,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.NavUtils
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.databinding.ActivityHelpBinding
 import kotlinx.android.synthetic.main.activity_help.*
@@ -32,10 +31,10 @@ class HelpActivity : AppCompatActivity() {
 
     private fun createFAQList() : List<FAQItem> {
         val list = ArrayList<FAQItem>()
-        val q1 = "Question1"
+        val q1 = "Jak si změním profilovou fotografii?"
         val q2 = "Question2"
         val q3 = "Question3"
-        val a1 = "Answer1"
+        val a1 = "V dolním menu vyberte záložku PROFIL a v horní polovině obrazovky klepněte na „Upravit profil“. V horní části vidíte svoji stávající fotografii a pod ní „Změnit profilovou fotku“. Klepnutím na tento text můžete změnit svoji stávající profilovou fotografii."
         val a2 = "Answer2"
         val a3 = "Answer3"
         val q_list = listOf<String>(q1, q2, q3)

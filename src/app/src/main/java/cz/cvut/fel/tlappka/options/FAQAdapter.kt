@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import cz.cvut.fel.tlappka.R
 import kotlinx.android.synthetic.main.faq_item.view.*
 
-class ListAdapter(private val listFAQ: List<FAQItem>) :
-    RecyclerView.Adapter<ListAdapter.FAQViewHolder>() {
+class FAQAdapter(private val listFAQ: List<FAQItem>) :
+    RecyclerView.Adapter<FAQAdapter.FAQViewHolder>() {
 
     class FAQViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
         val questionView : TextView = itemView.question

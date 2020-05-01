@@ -108,12 +108,6 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    ////  TODO: Connect navigation with options menu
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        return NavigationUI.onNavDestinationSelected(item, this.findNavController(R.id.myNavHostFragment))  ||
-//                super.onOptionsItemSelected(item)
-//    }
-
     fun replaceFragment(fragment: Fragment) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.container, fragment)

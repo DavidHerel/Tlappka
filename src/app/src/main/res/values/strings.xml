@@ -30,6 +30,7 @@ A SVÉ MAZLÍČKY</string>
     <string name="activity_email_text_error">Zadejte validní emailovou adresu</string>
     <string name="activity_password_text_error">Heslo musí mít minimální délku 4</string>
     <string name="activity_name_text_error">Jméno musí mít minimální délku 3</string>
+    <string name="forgotten_password">Zapomněli jste heslo?</string>
 
 
     <string name="action_sign_in">Sign in or register</string>
@@ -80,10 +81,19 @@ A SVÉ MAZLÍČKY</string>
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="faq">FAQ</string>
-    <string name="contact_us">CONTACT US</string>
+    <string name="faq">NEJČASTĚJŠÍ DOTAZY</string>
+    <string name="contact_us">KONTAKTUJTE VÝVOJÁŘE</string>
+    <string name="contacts">David Herel (hereldav@fel.cvut.cz)\nDaniela Hradilová (hradidan@fel.cvut.cz)\nNela Petrželková (petrznel@fel.cvut.cz)</string>
 
     <!-- Profile titles -->
 
     <string name="profile_edit_profile">Upravit profil</string>
+    <string name="account_settings_string">Nastavení účtu</string>
+    <string name="notifications_settings_string">Nastavení oznámení</string>
+    <string name="location_settings_string">Nastavení polohy</string>
+    <string name="dialog_header">Zadejte Vaše stávající heslo:</string>
+    <string name="old_password">Staré heslo</string>
+    <string name="new_password">Nové heslo</string>
+    <string name="new_password_again">Nové heslo podruhé</string>
+    <string name="change_password">Změnit heslo</string>
 </resources>

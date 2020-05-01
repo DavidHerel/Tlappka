@@ -52,8 +52,7 @@
                     android:scrollbars="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/faq_title"
-                    tools:listitem="@layout/faq_item">
+                    app:layout_constraintTop_toBottomOf="@+id/faq_title">
 
                 </androidx.recyclerview.widget.RecyclerView>
 
@@ -67,6 +66,21 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/faq_recyclerView" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:lineSpacingExtra="8sp"
+                    android:text="@string/contacts"
+                    android:textAlignment="center"
+                    android:textStyle="italic"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/contact_us" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
