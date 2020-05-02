@@ -1,18 +1,18 @@
 package cz.cvut.fel.tlappka.home
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.common.internal.Objects
 import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.home.model.Post
 import cz.cvut.fel.tlappka.home.model.PostContentHandler
 import kotlinx.android.synthetic.main.activity_content_home.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -29,7 +29,10 @@ class HomeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
-
+    override fun onResume() {
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+        super.onResume()
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
