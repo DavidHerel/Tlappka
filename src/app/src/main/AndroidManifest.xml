@@ -24,7 +24,7 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".options.SettingsActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"/>
         <activity android:name=".home.PostRow" />
         <activity android:name=".login.RegisterActivity" />
         <activity android:name=".login.SignInActivity" />

@@ -1,15 +1,16 @@
 package cz.cvut.fel.tlappka
 
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import cz.cvut.fel.tlappka.databinding.ActivityMainBinding
@@ -19,6 +20,7 @@ import cz.cvut.fel.tlappka.options.AboutActivity
 import cz.cvut.fel.tlappka.options.HelpActivity
 import cz.cvut.fel.tlappka.options.SettingsActivity
 import cz.cvut.fel.tlappka.profile.ProfileFragment
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -65,11 +67,6 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setTitle("Novinky")
         binding.bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         replaceFragment(HomeFragment())
-
-//        utils for navigation -- which is currently not working o.O
-//        val navController = this.findNavController(R.id.myNavHostFragment)
-//        NavigationUI.setupActionBarWithNavController(this, navController)
-
     }
 
 
@@ -78,6 +75,7 @@ class MainActivity : AppCompatActivity() {
         inflater.inflate(R.menu.options_menu, menu)
         return true
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {

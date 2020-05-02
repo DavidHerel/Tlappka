@@ -1,22 +1,18 @@
 package cz.cvut.fel.tlappka.home
 
+import android.content.Context
 import android.os.Bundle
-import android.view.*
-import androidx.databinding.DataBindingUtil
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.cvut.fel.tlappka.R
-import cz.cvut.fel.tlappka.databinding.ActivityMainBinding
 import cz.cvut.fel.tlappka.home.model.Post
 import cz.cvut.fel.tlappka.home.model.PostContentHandler
 import kotlinx.android.synthetic.main.activity_content_home.*
-import java.lang.StringBuilder
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.random.Random.Default.nextInt
 
 
 /**
@@ -29,8 +25,11 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
+
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -49,8 +48,7 @@ class HomeFragment : Fragment() {
 
         //handle to the Layout Manager and Adapter of the Recycler View
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerView.adapter = PostsAdapter(posts, activity!!.applicationContext)
-
+        recyclerView.adapter = PostsAdapter(posts, requireActivity().applicationContext)
     }
 
 }
