@@ -98,4 +98,26 @@ A SVÉ MAZLÍČKY</string>
     <string name="change_password">Změnit heslo</string>
     <string name="event_tab_history">Historie</string>
     <string name="event_tab_planned">Plánované</string>
+    <string name="add_new_activity">Vytvořit novou událost</string>
+    <string name="find_activity">Najít událost</string>
+    
+    <!-- Events-->
+    <string name="create_event_toolbar_text">Vytvoření události</string>
+    <string name="public_event">Veřejná</string>
+    <string name="private_event">Soukromá </string>
+    <string name="enable_GPS">Povolit GPS sledování</string>
+    <string name="start_now">Začít hned</string>
+    <string name="choose_time">Vybrat čas</string>
+    <string name="invite_friends">Pozvat přátele</string>
+    <string name="event_name">Název události</string>
+    <string name="create_event_other">Jiné</string>
+    <string name="create_event_walk">Procházka</string>
+    <string name="event_type_input">uveďte</string>
+    <string name="event_type">Typ události</string>
+    <string name="invited_friends">Pozvaní přátelé</string>
+    <string name="event_description">Popište plán události.</string>
+    <string name="now">Nyní</string>
+    <string name="later">Později</string>
+    <string name="event_start_time">Začátek konání události</string>
+    <string name="choose_date">Vybrat datum</string>
 </resources>

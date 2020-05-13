@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".options.ChangePasswordActivity"></activity>
+        <activity android:name=".events.CreateEventActivity"></activity>
+        <activity android:name=".options.ChangePasswordActivity" />
         <activity android:name=".options.AccountSettingsActivity" />
         <activity android:name=".options.NoficationsSettingsActivity" />
         <activity android:name=".profile.EditProfileActivity" />
@@ -24,7 +25,7 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".options.SettingsActivity"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".home.PostRow" />
         <activity android:name=".login.RegisterActivity" />
         <activity android:name=".login.SignInActivity" />
@@ -36,7 +37,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity" />
         <activity android:name=".onboarding.OnboardingActivity" />
 
         <meta-data

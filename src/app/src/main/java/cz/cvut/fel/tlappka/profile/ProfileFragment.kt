@@ -100,8 +100,6 @@ class ProfileFragment : Fragment() {
             // update UI
             Picasso.with(activity).load(uri).into(profileIcon)
         }
-
-
     }
 
     private fun hideProgressBar() {

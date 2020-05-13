@@ -14,5 +14,6 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorWhiteTransparent90">#90FFFFFF</color>
     <color name="colorOnboardingIndicatorInactive">#72BCF7</color>
+    <color name="colorTabSecondary">#8000B6D3</color>
 
 </resources>

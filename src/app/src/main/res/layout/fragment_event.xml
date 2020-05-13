@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".EventFragment">
+    tools:context=".events.EventFragment">
 
         <!--    <TextView-->
         <!--        android:layout_width="match_parent"-->
@@ -41,5 +41,40 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tab_layout" />
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:fab_addButtonColorNormal="@color/colorTextDarkGrey"
+        app:fab_addButtonColorPressed="@color/colorTextDarkGrey"
+        app:fab_addButtonPlusIconColor="@color/colorWhite"
+        app:fab_labelStyle="@drawable/fab_label"
+        app:layout_constraintBottom_toBottomOf="@+id/view_pager"
+        app:layout_constraintEnd_toEndOf="@+id/view_pager">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_new"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/colorTextLightGrey"
+            app:fab_colorPressed="@color/colorTextLightGrey"
+            app:fab_icon="@drawable/ic_add_white_24dp"
+            app:fab_size="mini"
+
+            app:fab_title="@string/add_new_activity"></com.getbase.floatingactionbutton.FloatingActionButton>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_find"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/colorTextLightGrey"
+            app:fab_colorPressed="@color/colorTextLightGrey"
+            app:fab_icon="@drawable/ic_search_white_24dp"
+            app:fab_size="mini"
+            app:fab_title="@string/find_activity"></com.getbase.floatingactionbutton.FloatingActionButton>
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

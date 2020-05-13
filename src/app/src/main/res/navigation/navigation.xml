@@ -11,7 +11,7 @@
         android:label="MainActivity" />
     <fragment
         android:id="@+id/eventFragment"
-        android:name="cz.cvut.fel.tlappka.EventFragment"
+        android:name="cz.cvut.fel.tlappka.events.EventFragment"
         android:label="fragment_event"
         tools:layout="@layout/fragment_event" />
     <fragment

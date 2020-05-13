@@ -1,11 +1,9 @@
 package cz.cvut.fel.tlappka
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -14,6 +12,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import cz.cvut.fel.tlappka.databinding.ActivityMainBinding
+import cz.cvut.fel.tlappka.events.EventFragment
 import cz.cvut.fel.tlappka.home.HomeFragment
 import cz.cvut.fel.tlappka.login.SignInActivity
 import cz.cvut.fel.tlappka.options.AboutActivity

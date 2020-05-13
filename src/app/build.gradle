@@ -101,4 +101,7 @@ dependencies {
 
     implementation 'com.android.support:design:29.0.0'
 
+    //FAB
+    implementation 'com.getbase:floatingactionbutton:1.10.1'
+
 }
