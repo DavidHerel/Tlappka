@@ -96,4 +96,6 @@ A SVÉ MAZLÍČKY</string>
     <string name="new_password">Nové heslo</string>
     <string name="new_password_again">Nové heslo podruhé</string>
     <string name="change_password">Změnit heslo</string>
+    <string name="event_tab_history">Historie</string>
+    <string name="event_tab_planned">Plánované</string>
 </resources>

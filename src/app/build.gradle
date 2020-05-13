@@ -72,7 +72,7 @@ dependencies {
     implementation 'androidx.viewpager2:viewpager2:1.1.0-alpha01'
 
     // Material Design
-    implementation 'com.google.android.material:material:1.2.0-alpha06'
+    implementation 'com.google.android.material:material:1.2.0-alpha02'
 
     //navigation support
     def nav_version = "2.3.0-alpha04"
@@ -98,5 +98,7 @@ dependencies {
 
     //round pic library
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    implementation 'com.android.support:design:29.0.0'
 
 }
