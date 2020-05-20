@@ -60,6 +60,10 @@ class CreateEventActivity : AppCompatActivity() {
         binding.fab.setOnClickListener {
             doneButton()
         }
+        binding.mapButton.setOnClickListener{
+            val mapIntent = Intent(this, MapsActivity::class.java)
+            startActivity(mapIntent)
+        }
     }
 
     private fun doneButton() {

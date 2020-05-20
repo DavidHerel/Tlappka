@@ -29,8 +29,9 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/event_create_constraint"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/general_space">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/event_name"
@@ -193,36 +194,21 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/invited_friends_text" />
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/view_rectangle"
-                    android:layout_width="0dp"
-                    android:layout_height="150dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    app:cardBackgroundColor="@color/colorPrimary90Transparent"
-                    app:cardCornerRadius="4dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/line3" />
-
                 <EditText
                     android:id="@+id/event_description"
+                    style="@style/home_comment_style"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="@android:color/transparent"
-                    android:ems="10"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/general_space"
+                    android:background="@drawable/editable_round_corners"
                     android:gravity="start|top"
                     android:hint="@string/event_description"
                     android:importantForAutofill="no"
                     android:inputType="textMultiLine"
-                    android:padding="8dp"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/view_rectangle"
-                    app:layout_constraintEnd_toEndOf="@+id/view_rectangle"
-                    app:layout_constraintStart_toStartOf="@+id/view_rectangle"
-                    app:layout_constraintTop_toTopOf="@+id/view_rectangle" />
+                    android:padding="@dimen/basic_padding"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/line3" />
 
                 <TextView
                     android:id="@+id/event_time"
@@ -309,6 +295,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/line4" />
 
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Map"
+                    android:id="@+id/mapButton"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/switch1" />
+
                 <View
                     android:id="@+id/line4"
                     android:layout_width="match_parent"
@@ -330,7 +327,7 @@
                     android:background="#c0c0c0"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/switch1" />
+                    app:layout_constraintTop_toBottomOf="@+id/mapButton" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

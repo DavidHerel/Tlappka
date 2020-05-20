@@ -100,7 +100,7 @@ A SVÉ MAZLÍČKY</string>
     <string name="event_tab_planned">Plánované</string>
     <string name="add_new_activity">Vytvořit novou událost</string>
     <string name="find_activity">Najít událost</string>
-    
+
     <!-- Events-->
     <string name="create_event_toolbar_text">Vytvoření události</string>
     <string name="public_event">Veřejná</string>
@@ -120,4 +120,7 @@ A SVÉ MAZLÍČKY</string>
     <string name="later">Později</string>
     <string name="event_start_time">Začátek konání události</string>
     <string name="choose_date">Vybrat datum</string>
+    <string name="title_activity_maps">Map</string>
+
+    <string name="address_search">Vyhledat adresu, město nebo stát</string>
 </resources>
