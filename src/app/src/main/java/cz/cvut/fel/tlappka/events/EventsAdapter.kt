@@ -20,12 +20,13 @@ class EventsAdapter(private val eventsList: List<EventItem>) : RecyclerView.Adap
 
     class MyViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
         val eventName: TextView = itemView.event_list_name
-        val date: TextView = itemView.event_list_date
-        val time: TextView = itemView.event_list_time
+//        val date: TextView = itemView.event_list_date
+//        val time: TextView = itemView.event_list_time
         val type: TextView = itemView.event_list_type
         val privacy: TextView = itemView.event_list_privacy
         val GPSTracking: TextView = itemView.event_list_GPS
         val description_text: TextView = itemView.event_list_description
+        val inProgress: TextView = itemView.in_progress_text
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -39,25 +40,33 @@ class EventsAdapter(private val eventsList: List<EventItem>) : RecyclerView.Adap
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = eventsList[position]
         holder.eventName.text = currentItem.name
-        holder.date.text = currentItem.date.toString()
-        holder.time.text = currentItem.time.toString()
+//        holder.date.text = currentItem.date.toString()
+//        holder.time.text = currentItem.time.toString()
+        holder.inProgress.text = getProgressString(currentItem.in_progress)
         holder.type.text = currentItem.type
         holder.privacy.text = getPrivacyString(currentItem.private)
         holder.GPSTracking.text = getGPSstring(currentItem.GPS_tracking)
         holder.description_text.text = currentItem.description
     }
 
-    private fun getGPSstring(gpsTracking: Boolean): CharSequence? {
+    private fun getProgressString(inProgress: Boolean?): CharSequence? {
+        return when (inProgress) {
+            true -> "Právě probíhá"
+            else -> "Naplánováno"
+        }
+    }
+
+    private fun getGPSstring(gpsTracking: Boolean?): CharSequence? {
         return when (gpsTracking) {
             true -> "Sledování pomocí GPS zapnuto"
             else -> "Sledování pomocí GPS vypnuto"
         }
     }
 
-    private fun getPrivacyString(private: Boolean): CharSequence? {
+    private fun getPrivacyString(private: Boolean?): CharSequence? {
         return when (private) {
-            true -> "Soukromý"
-            else -> "Veřejný"
+            true -> "Soukromá"
+            else -> "Veřejná"
         }
     }
 }

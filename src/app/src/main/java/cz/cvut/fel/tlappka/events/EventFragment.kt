@@ -33,6 +33,7 @@ class EventFragment : Fragment() {
 
         val fab_new = view.findViewById(R.id.fab_new) as com.getbase.floatingactionbutton.FloatingActionButton
 //        val fab_find = view.findViewById(R.id.fab_find) as FloatingActionButton
+
         fab_new.setOnClickListener {
             val intent = Intent(activity, CreateEventActivity::class.java)
             startActivity(intent)

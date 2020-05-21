@@ -4,46 +4,48 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="4dp"
+        app:cardUseCompatPadding="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp">
+            android:paddingBottom="@dimen/fab_margin">
 
             <TextView
                 android:id="@+id/event_list_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:text="Event name"
                 android:textSize="16dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-<!--TODO: add list of pets and friends that will be also in the event-->
-<!--            <de.hdodenhof.circleimageview.CircleImageView-->
-<!--                android:layout_width="50dp"-->
-<!--                android:layout_height="50dp"-->
-<!--                android:layout_marginStart="16dp"-->
-<!--                android:layout_marginTop="16dp"-->
-<!--                android:src="@drawable/account_circle_24px__1_"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/event_list_name" />-->
+            <!--TODO: add list of pets and friends that will be also in the event-->
+            <!--            <de.hdodenhof.circleimageview.CircleImageView-->
+            <!--                android:layout_width="50dp"-->
+            <!--                android:layout_height="50dp"-->
+            <!--                android:layout_marginStart="16dp"-->
+            <!--                android:layout_marginTop="16dp"-->
+            <!--                android:src="@drawable/account_circle_24px__1_"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/event_list_name" />-->
 
             <TextView
                 android:id="@+id/event_list_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="date"
                 app:layout_constraintEnd_toStartOf="@+id/event_list_time"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/event_list_profile_photo" />
+                app:layout_constraintStart_toEndOf="@+id/in_progress_text"
+                app:layout_constraintTop_toBottomOf="@+id/event_list_name" />
 
             <TextView
                 android:id="@+id/event_list_time"
@@ -61,10 +63,9 @@
                 android:id="@+id/event_list_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="type of event"
-                app:layout_constraintEnd_toStartOf="@+id/event_list_privacy"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/event_list_date" />
 
@@ -98,6 +99,16 @@
                 android:text="Dexcription of the event"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/event_list_GPS" />
+
+            <TextView
+                android:id="@+id/in_progress_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="inProgress"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/event_list_name" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

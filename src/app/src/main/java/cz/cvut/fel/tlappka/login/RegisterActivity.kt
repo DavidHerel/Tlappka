@@ -92,7 +92,7 @@ class RegisterActivity : AppCompatActivity() {
                 auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, OnCompleteListener{ task ->
                     if(task.isSuccessful){
 
-                        val user = User(name, Date(), "", email, "", "", "");
+                        val user = User(name, Date(), "", email, "", "", "", arrayListOf());
                         FirebaseDatabase.getInstance().getReference("Users")
                             .child(FirebaseAuth.getInstance().currentUser!!.uid)
                             .setValue(user).addOnCompleteListener {

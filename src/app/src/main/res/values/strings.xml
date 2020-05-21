@@ -109,7 +109,7 @@ A SVÉ MAZLÍČKY</string>
     <string name="start_now">Začít hned</string>
     <string name="choose_time">Vybrat čas</string>
     <string name="invite_friends">Pozvat přátele</string>
-    <string name="event_name">Název události</string>
+    <string name="event_name">Název události (max. 35 znaků)</string>
     <string name="create_event_other">Jiné</string>
     <string name="create_event_walk">Procházka</string>
     <string name="event_type_input">uveďte</string>
@@ -123,4 +123,5 @@ A SVÉ MAZLÍČKY</string>
     <string name="title_activity_maps">Map</string>
 
     <string name="address_search">Vyhledat adresu, město nebo stát</string>
+    <string name="choose_location">Vyberte místo konání událsoti</string>
 </resources>

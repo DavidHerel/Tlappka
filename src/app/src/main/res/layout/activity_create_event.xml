@@ -3,7 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".events.CreateEventActivity">
+    tools:context=".events.CreateEventActivity"
+    android:focusable="true"
+    android:focusableInTouchMode="true" >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -42,6 +44,9 @@
                     android:layout_marginEnd="16dp"
                     android:hint="@string/event_name"
                     android:inputType="textCapWords"
+                    android:maxLength="35"
+                    android:singleLine="true"
+                    android:imeOptions="actionDone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -284,27 +289,56 @@
                     app:layout_constraintStart_toEndOf="@+id/custom_date"
                     app:layout_constraintTop_toBottomOf="@+id/event_time" />
 
+
+                <ImageView
+                    android:id="@+id/gps_tracking_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/location_switch"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/location_switch"
+                    app:srcCompat="@drawable/ic_my_location_grey_24dp" />
+
                 <Switch
-                    android:id="@+id/switch1"
+                    android:id="@+id/location_switch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:switchPadding="@dimen/activity_vertical_margin"
+                    android:text="@string/enable_GPS"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/gps_tracking_icon"
+                    app:layout_constraintTop_toBottomOf="@+id/line4" />
+
+                <ImageView
+                    android:id="@+id/location_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:switchPadding="@dimen/activity_vertical_margin"
-                    android:text="@string/enable_GPS"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/line4" />
+                    app:layout_constraintTop_toBottomOf="@+id/location_switch"
+                    app:srcCompat="@drawable/ic_place_grey_24dp" />
 
-                <Button
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/location_text"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Map"
-                    android:id="@+id/mapButton"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="16dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/switch1" />
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:editable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/choose_location"
+                    android:textColor="@color/colorTextDarkGrey"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/location_icon"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/location_icon"
+                    app:layout_constraintTop_toBottomOf="@id/location_switch" />
 
                 <View
                     android:id="@+id/line4"
@@ -327,7 +361,7 @@
                     android:background="#c0c0c0"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/mapButton" />
+                    app:layout_constraintTop_toBottomOf="@+id/location_icon" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
