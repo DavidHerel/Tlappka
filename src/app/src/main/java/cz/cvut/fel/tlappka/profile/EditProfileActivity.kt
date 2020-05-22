@@ -88,19 +88,19 @@ class EditProfileActivity : AppCompatActivity() {
                     //TODO - now it passes to next activity only when it is succesfuly uploaded (so without internet connections it does nothing, just
                     // stores in db after device gets online) (also all text fields when offline come blank so blank text fields are stored)
                     //TODO Padá to, když tam není žádná fotka a chci uložit
-                    profileFragmentViewModel.saveImage((profile_photo_edit.getDrawable() as BitmapDrawable).bitmap)
-                        .observe(this) {
-                            if (it) {
-                                view.startAnimation(
-                                    AnimationUtils.loadAnimation(
-                                        this,
-                                        R.anim.layout_click
-
-                                    )
-                                );
+                    val drawable: Drawable = profile_photo_edit.getDrawable()
+                    var bmp: Bitmap? = null
+                    if (drawable is BitmapDrawable) {
+                        bmp = (profile_photo_edit.getDrawable() as BitmapDrawable).bitmap
+                        profileFragmentViewModel.saveImage(
+                            bmp
+                        ).observe(this) { bool ->
+                            if (bool) {
                                 finish();
                             }
                         }
+                    } else {
+                    }
                 }else{
                     finish();
                 }

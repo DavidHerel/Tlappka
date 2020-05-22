@@ -99,8 +99,12 @@ class EditPetActivity : AppCompatActivity() {
             //pet.owners.add(FirebaseAuth.getInstance().currentUser!!.uid)
             profileFragmentViewModel.updatePet(pet);
 
+            val drawable: Drawable = profile_pet_photo_edit.getDrawable()
+            var bmp: Bitmap? = null
+            if (drawable is BitmapDrawable) {
+                bmp = (profile_pet_photo_edit.getDrawable() as BitmapDrawable).bitmap
                 profileFragmentViewModel.saveImageProfilePet(
-                    (profile_pet_photo_edit.getDrawable() as BitmapDrawable).bitmap,
+                    bmp,
                     pet
                 ).observe(this) { bool ->
                     if (bool) {
@@ -113,6 +117,8 @@ class EditPetActivity : AppCompatActivity() {
                         finish();
                     }
                 }
+            } else {
+            }
 
         }
 

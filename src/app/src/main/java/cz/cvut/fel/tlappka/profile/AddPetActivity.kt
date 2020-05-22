@@ -70,19 +70,25 @@ class AddPetActivity : AppCompatActivity() {
                     pet.uid = uid;
                     //TODO - now it passes to next activity only when it is succesfuly uploaded (so without internet connections it does nothing, just
                     // stores in db after device gets online) (also all text fields when offline come blank so blank text fields are stored)
-                    profileFragmentViewModel.saveImageProfilePet(
-                        (profile_pet_photo_edit.getDrawable() as BitmapDrawable).bitmap,
-                        pet
-                    ).observe(this) { bool ->
-                        if (bool) {
-                            it.startAnimation(
-                                AnimationUtils.loadAnimation(
-                                    this,
-                                    R.anim.layout_click
-                                )
-                            );
-                            finish();
+                    val drawable: Drawable = profile_pet_photo_edit.getDrawable()
+                    var bmp: Bitmap? = null
+                    if (drawable is BitmapDrawable) {
+                        bmp = (profile_pet_photo_edit.getDrawable() as BitmapDrawable).bitmap
+                        profileFragmentViewModel.saveImageProfilePet(
+                            bmp,
+                            pet
+                        ).observe(this) { bool ->
+                            if (bool) {
+                                it.startAnimation(
+                                    AnimationUtils.loadAnimation(
+                                        this,
+                                        R.anim.layout_click
+                                    )
+                                );
+                                finish();
+                            }
                         }
+                    } else {
                     }
                 };
             }
