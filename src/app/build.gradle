@@ -86,10 +86,7 @@ dependencies {
     //Google Play Services
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
-    /*
-    implementation("com.google.android.gms:play-services-gcm:12.0.1") {
-        exclude group: "com.google.android.gms"
-    } */
+    implementation 'com.google.android.libraries.places:places:2.2.0'
 
     implementation 'com.squareup.picasso:picasso:2.5.2'
 

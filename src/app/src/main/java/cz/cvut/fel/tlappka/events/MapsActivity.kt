@@ -1,59 +1,112 @@
 package cz.cvut.fel.tlappka.events
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.KeyEvent
 import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import cz.cvut.fel.tlappka.R
+import java.util.*
 
-private const val TAG = "MapsActivity"
-private const val LOCATION_PERMISSION_REQUEST_CODE = 1234
-private const val DEFAULT_ZOOM = 17F
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback /*, OnConnectionFailedListener*/ {
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+    private val TAG = "MapsActivity"
+    private val LOCATION_PERMISSION_REQUEST_CODE = 1234
+    private val DEFAULT_ZOOM = 17F
+    private val API_KEY : String = "AIzaSyDSK2duzQcrhgWukFMHU5B14SdbThL6jiY"
 
     private lateinit var mMap: GoogleMap
     private var mLocationPermissionGranted: Boolean = false
     private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var placesClient : PlacesClient
+    private lateinit var selectedAddress: Address
 
     //widgets
-    private lateinit var mSearchText: EditText
     private lateinit var mGps: ImageView
-
+    private lateinit var autocompleteSupportFragment: AutocompleteSupportFragment
+    private lateinit var doneButton : ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
 
-        mSearchText = findViewById(R.id.input_search)
         mGps = findViewById(R.id.icon_gps)
+        doneButton = findViewById(R.id.button_maps)
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        doneButton.setOnClickListener(View.OnClickListener {
+            val data = Intent()
+            data.putExtra("address", selectedAddress.getAddressLine(0).toString())
+            setResult(Activity.RESULT_OK, data)
+            finish()
+        })
+
+        // Initialize Google Places API library
+        if(!Places.isInitialized()) {
+            Places.initialize(applicationContext, API_KEY)
+        }
+        placesClient = Places.createClient(this)
+
+        //Initialize AutocompleteSupportFragment
+        autocompleteSupportFragment =
+            supportFragmentManager.findFragmentById(R.id.autocomplete_fragment)
+                    as AutocompleteSupportFragment
+        /*
+        //specify what kind of place the user can type in
+        autocompleteSupportFragment.setTypeFilter(TypeFilter.ADDRESS)
+        //location biasing to improve the predictions
+        autocompleteSupportFragment.setLocationBias(RectangularBounds.newInstance(LATLNG_BOUNDS))
+        autocompleteSupportFragment.setCountries("IN") */
+
+        autocompleteSupportFragment.setHint("Vyhledat adresu")
+
+        //Specify which details of the place we will need about the selected place
+        autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, Place.Field.NAME))
+
+        autocompleteSupportFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onPlaceSelected(place: Place) {
+                //get info about the selected place
+                Log.i(TAG, "Place: " + place.name + ", " + place.id)
+                val location = Location(place.name)
+                location.latitude = place.latLng!!.latitude
+                location.longitude = place.latLng!!.longitude
+                //Toast.makeText(applicationContext, "Moved to a place: " + place?.name + " " + place.id, Toast.LENGTH_SHORT).show()
+                //customMoveCamera(LatLng(place.latLng!!.latitude, place.latLng!!.longitude), DEFAULT_ZOOM, place.name.toString())
+
+                //update the name in the searchbox, update current marker position and recenter map
+                geoLocate(location)
+            }
+            override fun onError(p0: Status) {
+                Log.i(TAG, "An error occurred: $p0")
+            }
+        })
+
+        //obtain the SupportMapFragment and get notified when the map is ready to be used
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -62,8 +115,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
+     * This is where we can add markers or lines, add listeners or move the camera.
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
@@ -73,34 +125,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         Toast.makeText(this, "Map is ready", Toast.LENGTH_SHORT).show()
         mMap = googleMap
 
-        /*
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney)) */
-
+        //get permission to use location info from the user
         getLocationPermission()
 
         if(mLocationPermissionGranted) {
             getDeviceLocation()
             mMap.isMyLocationEnabled = true //this adds a location button to the UI
             mMap.uiSettings.isMyLocationButtonEnabled = false //disables the default location icon
-        }
-
-        locateAddressInit()
-
-    }
-
-    private fun locateAddressInit() {
-        //override enter next line key into confimation action
-        mSearchText.setOnEditorActionListener { v, actionId, event ->
-            if(actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE ||
-                event.action == KeyEvent.ACTION_DOWN ||
-                event.action == KeyEvent.KEYCODE_ENTER) {
-                geoLocate()
-                true
-            }
-            false
+        } else {
+            //add a marker in Prague and move the camera
+            val prague = LatLng(50.073658, 14.418540)
+            customMoveCamera(prague, DEFAULT_ZOOM, "Praha")
         }
 
         mGps.setOnClickListener( View.OnClickListener {
@@ -109,35 +144,32 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    private fun geoLocate() {
-        var searchStr: String = mSearchText.text.toString()
-        var geocoder = Geocoder(this)
-        var list: List<Address> = geocoder.getFromLocationName(searchStr, 1)
+    private fun geoLocate(searchLoc: Location) {
+        val geocoder = Geocoder(this)
+        val list: List<Address> = geocoder.getFromLocation(searchLoc.latitude, searchLoc.longitude, 1)
         if(list.size > 0) {
-            var address: Address = list.get(0)
-
-            Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show()
-
+            val address: Address = list.get(0)
+            Toast.makeText(this, "Moved to address:\n" + address.getAddressLine(0), Toast.LENGTH_SHORT).show()
             customMoveCamera(LatLng(address.latitude, address.longitude), DEFAULT_ZOOM, address.getAddressLine(0))
+            autocompleteSupportFragment.setText(address.getAddressLine(0))
+            selectedAddress = address
         }
-
     }
 
-    //TODO fix the map is blurry, only load the central part of the map
     private fun getDeviceLocation() {
-        Toast.makeText(this, "Getting devices current location", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, "Getting devices current location", Toast.LENGTH_SHORT).show()
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         if(mLocationPermissionGranted) {
-            var location: Task<Location> = mFusedLocationProviderClient.lastLocation
+            val location: Task<Location> = mFusedLocationProviderClient.lastLocation
             location.addOnCompleteListener { task ->
                 if(task.isSuccessful()) {
-                    Toast.makeText(this, "Current location found", Toast.LENGTH_SHORT).show()
-                    var currentLocation : Location = task.getResult() as Location
-                    customMoveCamera(LatLng(currentLocation.latitude, currentLocation.longitude), DEFAULT_ZOOM, "My Location")
+                    //Toast.makeText(this, "Current location found", Toast.LENGTH_SHORT).show()
+                    val currentLocation : Location = task.getResult() as Location
+                    geoLocate(currentLocation)
                 } else {
-                    Toast.makeText(this, "Unable to find current location", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this, "Unable to find current location", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -146,9 +178,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun customMoveCamera(LatLng: LatLng, zoom: Float, title: String) {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng, zoom))
 
-        //code for dropping the pin
-        //dropping the marker/ pin on the map
-        var markerOptions: MarkerOptions = MarkerOptions().position(LatLng).title(title)
+        //code for dropping the marker/ pin on the map
+        val markerOptions: MarkerOptions = MarkerOptions().position(LatLng).title(title)
         mMap.clear() //replace current marker, do not create new ones
         mMap.addMarker(markerOptions)
     }
@@ -158,9 +189,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             == PackageManager.PERMISSION_GRANTED) {
             //permission is granted
             mLocationPermissionGranted = true
-            //mMap.setMyLocationEnabled(true)
-
-            //mMap.isMyLocationEnabled = true
         } else {
             // Permission to access the location is missing. Show rationale and request permission
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -170,10 +198,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                     LOCATION_PERMISSION_REQUEST_CODE)
             }
-            /*
+
             // Permission to access the location is missing. Show rationale and request permission
             ActivityCompat.requestPermissions(this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE) */
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
         }
 
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(50.07682455055432, 14.4195556640625), DEFAULT_ZOOM))
@@ -201,7 +229,5 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
-
-
 
 }

@@ -17,4 +17,6 @@
     string in this file.
     -->
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDSK2duzQcrhgWukFMHU5B14SdbThL6jiY</string>
+    <!-- this is the api key from the class just for testing purposes:
+    string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAzAnXBnkXtoYPMo1BrFHkj7FtbzhHFQJY</string-->
 </resources>

@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.observe
+import com.google.android.libraries.places.widget.Autocomplete
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.squareup.picasso.Picasso
@@ -32,6 +33,7 @@ import java.util.*
 
 class CreateEventActivity : AppCompatActivity() {
 
+    private val LOCATION_REQUEST_CODE = 100
     private val profileFragmentViewModel: ProfileFragmentViewModel by viewModels()
     private lateinit var binding: ActivityCreateEventBinding
     private lateinit var date : TextView
@@ -75,12 +77,35 @@ class CreateEventActivity : AppCompatActivity() {
         binding.locationText.setOnClickListener{
             val mapIntent = Intent(this, MapsActivity::class.java)
             startActivity(mapIntent)
+            //TODO this needs to be fixed, now it crashed the app
+            //startActivityForResult(mapIntent, LOCATION_REQUEST_CODE)
         }
 
         val imm: InputMethodManager =
             getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(eventName.getWindowToken(), 0)
 
+    }
+
+    //handle result from map search
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == LOCATION_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                //initialize place
+                var place = Autocomplete.getPlaceFromIntent(data!!)
+                //set the address to editText
+                binding.locationText.setText(place.address)
+                Toast.makeText(applicationContext, "Address updates to: " + place.address, Toast.LENGTH_SHORT).show()
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                //handle the error
+                Toast.makeText(applicationContext, "Cancelled", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     // edit text loses focus when is clicked anywhere else (works for any edit text in activity)
