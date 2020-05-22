@@ -110,7 +110,9 @@ class ProfileFragmentRepository {
             .child("pics/${FirebaseAuth.getInstance().currentUser?.uid}/profilePic");
 
         //compress (100 means best image quality, 0 means worst)
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
+        var bitmap = bitmap;
+        bitmap = getResizedBitmap(bitmap, 270);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, baos);
         val image = baos.toByteArray();
 
         //put it in storage database
@@ -135,39 +137,29 @@ class ProfileFragmentRepository {
         val baos = ByteArrayOutputStream();
         data.value = false;
 
-        FirebaseDatabase.getInstance().getReference("Pets")
-            .child(pet.uid)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
+        val storageRef = FirebaseStorage.getInstance()
+            .reference
+            .child("pics/${pet.uid}/profilePic");
+        var bitmap = bitmap;
+        //compress (100 means best image quality, 0 means worst)
+        bitmap = getResizedBitmap(bitmap, 270);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, baos);
+        val image = baos.toByteArray();
 
-                override fun onCancelled(p0: DatabaseError) {
+        //put it in storage database
+        val upload = storageRef.putBytes(image);
+
+        //when uploaded
+        upload.addOnCompleteListener{ uploadTask ->
+            if (uploadTask.isSuccessful){
+                data.value = true;
+            }else{
+                uploadTask.exception?.let {
+                    data.value = false;
                 }
+            }
+        }
 
-                override fun onDataChange(p0: DataSnapshot) {
-                    dataPet.value = p0.getValue(Pet::class.java)!!;
-                    //get storage ref
-                    val storageRef = FirebaseStorage.getInstance()
-                        .reference
-                        .child("pics/${dataPet.value!!.uid}/profilePic");
-
-                    //compress (100 means best image quality, 0 means worst)
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
-                    val image = baos.toByteArray();
-
-                    //put it in storage database
-                    val upload = storageRef.putBytes(image);
-
-                    //when uploaded
-                    upload.addOnCompleteListener{ uploadTask ->
-                        if (uploadTask.isSuccessful){
-                            data.value = true;
-                        }else{
-                            uploadTask.exception?.let {
-                                data.value = false;
-                            }
-                        }
-                    }
-                }
-            })
         return data;
     }
 
@@ -223,5 +215,25 @@ class ProfileFragmentRepository {
         return dataID;
 
 
+    }
+
+    /**
+     * reduces the size of the image
+     * @param image
+     * @param maxSize
+     * @return
+     */
+    fun getResizedBitmap(image: Bitmap, maxSize: Int): Bitmap {
+        var width = image.width
+        var height = image.height
+        val bitmapRatio = width.toFloat() / height.toFloat()
+        if (bitmapRatio > 1) {
+            width = maxSize
+            height = (width / bitmapRatio).toInt()
+        } else {
+            height = maxSize
+            width = (height * bitmapRatio).toInt()
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true)
     }
 }
