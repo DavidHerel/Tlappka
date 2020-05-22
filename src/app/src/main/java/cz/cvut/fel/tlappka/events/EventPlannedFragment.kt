@@ -46,7 +46,6 @@ class EventPlannedFragment : Fragment() {
                 Log.w("Planned events", "loadPost:onCancelled", databaseError.toException())
             }
 
-            @RequiresApi(Build.VERSION_CODES.O)
             override fun onDataChange(dataSnapshot: DataSnapshot) {
 
                 dataSnapshot.children.forEach {

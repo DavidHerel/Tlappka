@@ -1,14 +1,21 @@
 package cz.cvut.fel.tlappka.events
 
 import android.content.Context
+import android.content.Intent
 import android.opengl.Visibility
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
+import android.widget.Toast
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import cz.cvut.fel.tlappka.R
 import kotlinx.android.synthetic.main.event_item.view.*
 
@@ -25,6 +32,7 @@ class EventsAdapter(private val eventsList: List<EventItem>, private val mCtx: C
         val description_text: TextView = itemView.event_list_description
         val inProgress: TextView = itemView.in_progress_text
         val options: TextView = itemView.event_options
+        val cardView: CardView = itemView.card_view
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -48,6 +56,7 @@ class EventsAdapter(private val eventsList: List<EventItem>, private val mCtx: C
         if (holder.description_text.text.equals("")) {
             holder.description_text.visibility = View.GONE
         }
+        holder.cardView.setTag(position)
         holder.options.setOnClickListener(View.OnClickListener {
             val popup =
                 PopupMenu(mCtx, holder.options)
@@ -58,8 +67,10 @@ class EventsAdapter(private val eventsList: List<EventItem>, private val mCtx: C
                         true
                     R.id.end_item ->
                         true
-                    R.id.delete_item ->
+                    R.id.delete_item -> {
+//                        deleteItem(currentItem.name)
                         true
+                    }
                     else -> false
                 }
             }
@@ -68,6 +79,21 @@ class EventsAdapter(private val eventsList: List<EventItem>, private val mCtx: C
         })
     }
 
+    private fun deleteItem(name: String?) {
+        val db = FirebaseDatabase.getInstance()
+        val myRef = db.getReference("Events").child(FirebaseAuth.getInstance().currentUser!!.uid)
+        val query: Query = myRef.orderByChild("name").equalTo(name)
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                Log.w("User", p0.message)
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                p0.ref.removeValue()
+            }
+        })
+    }
+    
     private fun getProgressString(inProgress: Boolean?): CharSequence? {
         return when (inProgress) {
             true -> "Právě probíhá"

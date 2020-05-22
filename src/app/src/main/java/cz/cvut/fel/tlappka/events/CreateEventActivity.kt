@@ -1,6 +1,7 @@
 package cz.cvut.fel.tlappka.events
 
 import android.app.*
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
@@ -16,6 +17,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.NotificationCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.observe
 import com.google.android.libraries.places.widget.Autocomplete
@@ -27,9 +29,12 @@ import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.databinding.ActivityCreateEventBinding
 import cz.cvut.fel.tlappka.profile.ProfileFragmentViewModel
 import kotlinx.android.synthetic.main.activity_create_event.*
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
+
+private lateinit var eventCreated: EventItem
 
 class CreateEventActivity : AppCompatActivity() {
 
@@ -46,9 +51,9 @@ class CreateEventActivity : AppCompatActivity() {
     private lateinit var laterRadio: RadioButton
     private lateinit var eventType: EditText
     private lateinit var eventName: EditText
+    private lateinit var locationText: EditText
     private var dateChosen: Boolean = false
     private var timeChosen: Boolean = false
-    private lateinit var calendar: Calendar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +73,7 @@ class CreateEventActivity : AppCompatActivity() {
         dateText = findViewById(R.id.custom_date)
         timeText = findViewById(R.id.custom_time)
         eventName = findViewById(R.id.event_name)
+        locationText = findViewById(R.id.location_text)
         fillProfilePhoto()
         setRadioButtonsListeners()
         dateAndTime()
@@ -76,9 +82,9 @@ class CreateEventActivity : AppCompatActivity() {
         }
         binding.locationText.setOnClickListener{
             val mapIntent = Intent(this, MapsActivity::class.java)
-            startActivity(mapIntent)
+//            startActivity(mapIntent)
             //TODO this needs to be fixed, now it crashed the app
-            //startActivityForResult(mapIntent, LOCATION_REQUEST_CODE)
+            startActivityForResult(mapIntent, LOCATION_REQUEST_CODE)
         }
 
         val imm: InputMethodManager =
@@ -97,10 +103,10 @@ class CreateEventActivity : AppCompatActivity() {
         if (requestCode == LOCATION_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 //initialize place
-                var place = Autocomplete.getPlaceFromIntent(data!!)
+                var place = data?.extras?.getString("address")
                 //set the address to editText
-                binding.locationText.setText(place.address)
-                Toast.makeText(applicationContext, "Address updates to: " + place.address, Toast.LENGTH_SHORT).show()
+                binding.locationText.setText(place)
+                Toast.makeText(applicationContext, "Address updates to: " + place, Toast.LENGTH_SHORT).show()
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 //handle the error
                 Toast.makeText(applicationContext, "Cancelled", Toast.LENGTH_SHORT).show()
@@ -159,10 +165,11 @@ class CreateEventActivity : AppCompatActivity() {
         }
 
         if (inProgress) {
+            val now = Calendar.getInstance()
             val dateFormat = SimpleDateFormat("dd MMM YYYY", Locale.US)
             val timeFormat = SimpleDateFormat("HH:mm", Locale.US)
-            date = dateFormat.format(calendar.time)
-            time = timeFormat.format(calendar.time)
+            date = dateFormat.format(now.time)
+            time = timeFormat.format(now.time)
         }
         val private: Boolean = radio_private.isChecked
         var newEvent = EventItem(name, inProgress, date, time, text, type, private, false)
@@ -170,11 +177,44 @@ class CreateEventActivity : AppCompatActivity() {
         FirebaseDatabase.getInstance().getReference("Events")
             .child(FirebaseAuth.getInstance().currentUser!!.uid).push().setValue(newEvent)
 
+        if (!inProgress) {
+            val alarmManager: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val notifIntent = Intent(this, AlarmReceiver::class.java)
+            notifIntent.putExtra("event", newEvent)
+            val calendar = Calendar.getInstance()
+            val dateItems = date.split(" ")
+            val timeItem = time.split(":")
+            calendar.set(Calendar.YEAR, dateItems[2].toInt())
+            calendar.set(Calendar.MONTH, getMonth(dateItems[1]))
+            calendar.set(Calendar.DAY_OF_MONTH, dateItems[0].toInt())
+            calendar.set(Calendar.HOUR_OF_DAY, timeItem[0].toInt())
+            calendar.set(Calendar.MINUTE, timeItem[1].toInt())
+            calendar.set(Calendar.SECOND, 0)
+            val broadcast = PendingIntent.getBroadcast(
+                this,
+                100,
+                notifIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, broadcast)
+        }
+    }
 
-//        val alarmManager: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//        val notifIntent = Intent("")
-//        val broadcast = PendingIntent.getBroadcast(this, 100, notifIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-//        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, broadcast)
+    private fun getMonth(month: String): Int {
+        return when (month) {
+            "Jan" -> {0}
+            "Feb" -> {1}
+            "Mar" -> {2}
+            "Apr" -> {3}
+            "May" -> {4}
+            "Jun" -> {5}
+            "Jul" -> {6}
+            "Aug" -> {7}
+            "Sep" -> {8}
+            "Oct" -> {9}
+            "Nov" -> {10}
+            else -> {11}
+        }
     }
 
     private fun dateAndTime() {
@@ -183,25 +223,42 @@ class CreateEventActivity : AppCompatActivity() {
         val timeFormat = SimpleDateFormat("HH:mm", Locale.US)
 
         date.setOnClickListener {
-            val datePicker = DatePickerDialog(this,
-                DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                    calendar.set(Calendar.YEAR, year)
-                    calendar.set(Calendar.MONTH, month)
-                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                    date.text = dateFormat.format(calendar.time)
-                    dateChosen = true
-                },
-                now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH))
-            datePicker.datePicker.minDate = System.currentTimeMillis()
-            datePicker.show()
+            if (timeChosen) {
+                val datePicker = DatePickerDialog(
+                    this,
+                    DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                        val dateCalendar = Calendar.getInstance()
+                        dateCalendar.set(Calendar.YEAR, year)
+                        dateCalendar.set(Calendar.MONTH, month)
+                        dateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                        date.text = dateFormat.format(dateCalendar.time)
+                        dateChosen = true
+                    },
+                    now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH)
+                )
+                val timeItem = custom_time.text.split(":")
+                val calendar = Calendar.getInstance()
+                val now = Calendar.getInstance()
+                calendar.set(Calendar.HOUR_OF_DAY, timeItem[0].toInt())
+                calendar.set(Calendar.MINUTE, timeItem[1].toInt())
+                if (calendar.before(now)) {
+                    datePicker.datePicker.minDate = System.currentTimeMillis() + (60*60*24*1000)
+                } else {
+                    datePicker.datePicker.minDate = System.currentTimeMillis()
+                }
+                datePicker.show()
+            } else {
+                Toast.makeText(this, "Nejprve vyberte čas", Toast.LENGTH_SHORT).show()
+            }
         }
 
 
         time.setOnClickListener {
         val timePicker = TimePickerDialog(this, TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
-            calendar.set(Calendar.MINUTE, minute)
-            time.text = timeFormat.format(calendar.time)
+            val timeCalendar = Calendar.getInstance()
+            timeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+            timeCalendar.set(Calendar.MINUTE, minute)
+            time.text = timeFormat.format(timeCalendar.time)
             timeChosen = true
         },
             now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), true)
@@ -255,4 +312,5 @@ class CreateEventActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
 }

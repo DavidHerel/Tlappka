@@ -1,16 +1,10 @@
 package cz.cvut.fel.tlappka.events
 
-import android.os.Build
-import androidx.annotation.RequiresApi
-import java.sql.Date
-import java.sql.Time
-import java.time.LocalDate
-import java.time.LocalTime
-import java.util.*
+import java.io.Serializable
 
 data class EventItem(
     val name: String?,
-    val in_progress: Boolean?,
+    var in_progress: Boolean?,
     val date: String?,
     val time: String?,
 //    val with_users: ArrayList<String>,
@@ -19,7 +13,7 @@ data class EventItem(
     val type: String?,
     val private: Boolean?,
     val GPS_tracking: Boolean?
-) {
+): Serializable {
     constructor() : this("", true, "", "",
         "", "", true, false)
 }

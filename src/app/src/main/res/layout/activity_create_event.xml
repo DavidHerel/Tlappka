@@ -260,33 +260,32 @@
                 </RadioGroup>
 
                 <TextView
-                    android:id="@+id/custom_date"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:hint="@string/choose_date"
-                    android:textAlignment="center"
-                    android:textSize="14sp"
-                    android:visibility="invisible"
-                    android:gravity="center"
-                    app:layout_constraintBottom_toBottomOf="@+id/event_timing"
-                    app:layout_constraintEnd_toStartOf="@+id/custom_time"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/event_timing"
-                    app:layout_constraintTop_toBottomOf="@+id/event_time" />
-
-                <TextView
                     android:id="@+id/custom_time"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
                     android:hint="@string/choose_time"
                     android:textAlignment="center"
                     android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="@+id/event_timing"
+                    app:layout_constraintEnd_toStartOf="@+id/custom_date"
+                    app:layout_constraintStart_toEndOf="@+id/event_timing"
+                    app:layout_constraintTop_toBottomOf="@+id/event_time"
+                    app:layout_constraintVertical_bias="0.517" />
+
+                <TextView
+                    android:id="@+id/custom_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:hint="@string/choose_date"
+                    android:textAlignment="center"
+                    android:textSize="14sp"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="@+id/event_timing"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/custom_date"
+                    app:layout_constraintStart_toEndOf="@+id/custom_time"
                     app:layout_constraintTop_toBottomOf="@+id/event_time" />
 
 
