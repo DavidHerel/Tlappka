@@ -5,5 +5,5 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 data class User (var name : String = "", var birthDate : Date = Date(), var place : String = "", var email : String = "", var hobbies : String = "",
-                 var about : String = "", var job : String = "", var plannedEvents : ArrayList<EventItem> = arrayListOf()
+                 var about : String = "", var job : String = "", var plannedEvents : ArrayList<EventItem> = arrayListOf(), var pets : ArrayList<String> = java.util.ArrayList()
 )

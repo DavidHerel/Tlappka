@@ -9,21 +9,30 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.os.Environment.getExternalStorageDirectory
 import android.provider.MediaStore
+import android.view.Menu
+import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.observe
+import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 import cz.cvut.fel.tlappka.R
+import cz.cvut.fel.tlappka.model.Pet
 import cz.cvut.fel.tlappka.model.User
-import kotlinx.android.synthetic.main.activity_edit_profile.*
+import kotlinx.android.synthetic.main.activity_add_pet.*
 import kotlinx.android.synthetic.main.top_profile_edit_toolbar.*
+import java.io.ByteArrayOutputStream
+import java.io.File
 
 
-class EditProfileActivity : AppCompatActivity() {
+class AddPetActivity : AppCompatActivity() {
     private val profileFragmentViewModel: ProfileFragmentViewModel by viewModels()
 
     //just to track the call
@@ -32,36 +41,19 @@ class EditProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_profile)
+        setContentView(R.layout.activity_add_pet)
+
+        profile_pet_photo_edit.setImageBitmap(drawableToBitmap(ContextCompat.getDrawable(applicationContext ,R.drawable.account_circle_24px__1_)!!))
+
+        profileName.setText("Přidat mazlíčka")
         setSupportActionBar(findViewById(R.id.profileEditToolBar));
 
-        profile_photo_edit.setImageBitmap(drawableToBitmap(ContextCompat.getDrawable(applicationContext ,R.drawable.account_circle_24px__1_)!!))
-        cancelEditProfileButton();
-        doneEditProfileButton();
-        changeProfilePicButton();
-        fillTexts();
-        fillProfilePhoto();
+        addPetProfilePicButton();
+        cancelAddPetButton();
+        doneAddPetButton()
     }
 
-    fun fillTexts(){
-        profileFragmentViewModel.getUser().observe(this) { user ->
-            // update UI
-            usernameProfileEdit.setText(user?.name);
-            placeProfileEdit.setText(user?.place);
-            hobbiesProfileEdit.setText(user?.hobbies);
-            jobProfileEdit.setText(user?.job);
-            aboutProfileEdit.setText(user?.about);
-        }
-    }
-
-    private fun fillProfilePhoto(){
-        profileFragmentViewModel.getUri().observe(this) { uri ->
-            // update UI
-            Picasso.with(this).load(uri).into(profile_photo_edit)
-        }
-    }
-
-    fun cancelEditProfileButton() {
+    fun cancelAddPetButton() {
         backArrow.setOnClickListener {
             it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.layout_click));
             finish();
@@ -71,43 +63,39 @@ class EditProfileActivity : AppCompatActivity() {
 
 
     //update data
-    fun doneEditProfileButton() {
-        saveChanges.setOnClickListener {view->
-            var user = User();
-            user.name = usernameProfileEdit.text.toString();
-            user.about = aboutProfileEdit.text.toString();
-            user.hobbies = hobbiesProfileEdit.text.toString();
-            user.job = jobProfileEdit.text.toString();
-            user.place = placeProfileEdit.text.toString();
-            profileFragmentViewModel.getUser().observe(this) { userTemp ->
-                user.pets = userTemp.pets;
-                profileFragmentViewModel.updateUser(user);
-
-            //TODO - now it passes to next activity only when it is succesfuly uploaded (so without internet connections it does nothing, just
-            // stores in db after device gets online) (also all text fields when offline come blank so blank text fields are stored)
-            //TODO Padá to, když tam není žádná fotka a chci uložit
-                profileFragmentViewModel.saveImage((profile_photo_edit.getDrawable() as BitmapDrawable).bitmap)
-                    .observe(this) {
-                        if (it) {
-                            view.startAnimation(
+    fun doneAddPetButton() {
+        saveChanges.setOnClickListener {
+            var pet = Pet();
+            pet.name = usernameAddPet.text.toString();
+            pet.about = aboutAddPet.text.toString();
+            pet.hobbies = hobbiesAddPet.text.toString();
+            pet.place = placeAddPet.text.toString();
+            pet.owners.add(FirebaseAuth.getInstance().currentUser!!.uid)
+            profileFragmentViewModel.updatePet(pet).observe(this){ uid->
+                pet.uid = uid;
+                //TODO - now it passes to next activity only when it is succesfuly uploaded (so without internet connections it does nothing, just
+                // stores in db after device gets online) (also all text fields when offline come blank so blank text fields are stored)
+                    profileFragmentViewModel.saveImageProfilePet(
+                        (profile_pet_photo_edit.getDrawable() as BitmapDrawable).bitmap,
+                        pet
+                    ).observe(this) { bool ->
+                        if (bool) {
+                            it.startAnimation(
                                 AnimationUtils.loadAnimation(
                                     this,
                                     R.anim.layout_click
-
                                 )
                             );
                             finish();
                         }
                     }
-            }
+            };
         }
-
-
 
     }
 
-    fun changeProfilePicButton() {
-        changeProfilePhoto.setOnClickListener {
+    fun addPetProfilePicButton() {
+        changeProfilePhotoPet.setOnClickListener {
             it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.layout_click));
 
             //takePictureIntent();
@@ -142,11 +130,11 @@ class EditProfileActivity : AppCompatActivity() {
             if (requestCode == REQUEST_IMAGE_CAPTURE) {
                 //pic from camera
                 val imageBitmap = data?.extras?.get("data") as Bitmap
-                profile_photo_edit.setImageBitmap(imageBitmap)
+                profile_pet_photo_edit.setImageBitmap(imageBitmap)
             }else  if (requestCode == REQUEST_GALLERY){
                 val uri = data?.data;
                 //photo from gallery
-                profile_photo_edit.setImageURI(data?.data)
+                profile_pet_photo_edit.setImageURI(data?.data)
             }
         }
     }
@@ -154,7 +142,7 @@ class EditProfileActivity : AppCompatActivity() {
     private fun selectImage() {
         val options =
             arrayOf<CharSequence>("Vyfotit", "Vybrat z galerie", "Zrušit")
-        val builder: AlertDialog.Builder = AlertDialog.Builder(this@EditProfileActivity)
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this@AddPetActivity)
         builder.setTitle("Přidat fotku")
         builder.setItems(options, DialogInterface.OnClickListener { dialog, item ->
             if (options[item] == "Vyfotit") {
@@ -194,5 +182,4 @@ class EditProfileActivity : AppCompatActivity() {
         drawable.draw(canvas)
         return bitmap
     }
-
 }

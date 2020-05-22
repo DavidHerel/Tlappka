@@ -10,9 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.home.PostsAdapter
@@ -20,12 +18,13 @@ import cz.cvut.fel.tlappka.home.model.Post
 import cz.cvut.fel.tlappka.profile.adapter.CustomAdapter
 import cz.cvut.fel.tlappka.profile.adapter.IkonkaModelClass
 import kotlinx.android.synthetic.main.activity_content_profile.*
+import kotlinx.android.synthetic.main.activity_edit_profile.*
 
 
 /**
  * A simple [Fragment] subclass.
  */
-class ProfileFragment : Fragment() {
+class PetFragment : Fragment() {
     private val profileFragmentViewModel: ProfileFragmentViewModel by viewModels()
 
     override fun onCreateView(
@@ -57,43 +56,6 @@ class ProfileFragment : Fragment() {
 
     }
 
-    private fun updatePets(){
-
-        var items: java.util.ArrayList<IkonkaModelClass> = java.util.ArrayList<IkonkaModelClass>()
-        val adapter = CustomAdapter(context, items)
-        recycler_view_pets_icons.layoutManager = LinearLayoutManager(
-            context,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        recycler_view_pets_icons.adapter = adapter
-
-        var i = 0;
-        //getting user
-        profileFragmentViewModel.getUser().observe(viewLifecycleOwner) {
-            items.clear();
-            // update UI
-            for(item in it.pets){
-                if(!item.isNullOrBlank()) {
-                    Toast.makeText(context, item + " petNumber "+  i, Toast.LENGTH_LONG).show()
-                    i++;
-
-                    items.add(IkonkaModelClass(Uri.parse("https://picsum.photos/600/300?random&"), "t", item))
-                    adapter.notifyDataSetChanged()
-
-                    //TODO - Tady je chyba, padá do, když chci použít fotky z DB
-                    /*
-                    profileFragmentViewModel.getUriProfilePet(item)?.observe(viewLifecycleOwner){uri->
-                            items.add(IkonkaModelClass(uri, "Popisek", item))
-                            adapter.notifyDataSetChanged()
-                    }
-                    */
-
-                }
-            }
-        }
-    }
-
     private fun initChangeProfileButton() {
         //listener on edit
         changeProfileButton.setOnClickListener(View.OnClickListener {
@@ -112,17 +74,15 @@ class ProfileFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        fillTexts();
-        fillProfilePhoto();
-        updatePets();
+        //fillTexts();
+        //fillProfilePhoto();
     }
 
     //everytime the user profile data are updated -> UI refreshed
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fillTexts();
-        fillProfilePhoto();
-        updatePets();
+        //fillTexts();
+        //fillProfilePhoto();
     }
 
 

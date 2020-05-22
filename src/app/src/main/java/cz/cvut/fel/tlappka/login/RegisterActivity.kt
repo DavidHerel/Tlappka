@@ -19,6 +19,7 @@ import cz.cvut.fel.tlappka.MainActivity
 import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.model.User
 import java.util.*
+import kotlin.collections.ArrayList
 
 /*
 Activity which is hadnling registers
@@ -92,7 +93,7 @@ class RegisterActivity : AppCompatActivity() {
                 auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, OnCompleteListener{ task ->
                     if(task.isSuccessful){
 
-                        val user = User(name, Date(), "", email, "", "", "", arrayListOf());
+                        val user = User(name, Date(), "", email, "", "", "", arrayListOf(), ArrayList<String>());
                         FirebaseDatabase.getInstance().getReference("Users")
                             .child(FirebaseAuth.getInstance().currentUser!!.uid)
                             .setValue(user).addOnCompleteListener {
