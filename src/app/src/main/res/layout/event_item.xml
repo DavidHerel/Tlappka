@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:cardElevation="4dp"
         app:cardCornerRadius="4dp"
         app:cardUseCompatPadding="true">
@@ -18,9 +18,10 @@
                 android:id="@+id/event_list_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:text="Event name"
+                android:textColor="@color/colorTextBlack"
                 android:textSize="16dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -37,34 +38,52 @@
             <!--                app:layout_constraintTop_toBottomOf="@+id/event_list_name" />-->
 
             <TextView
+                android:id="@+id/event_options"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/options"
+                android:textAppearance="?android:textAppearanceLarge"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/begin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Začátek"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/event_list_name" />
+
+            <TextView
                 android:id="@+id/event_list_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="8dp"
                 android:text="date"
-                app:layout_constraintEnd_toStartOf="@+id/event_list_time"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/in_progress_text"
-                app:layout_constraintTop_toBottomOf="@+id/event_list_name" />
+                app:layout_constraintBottom_toBottomOf="@+id/begin"
+                app:layout_constraintStart_toEndOf="@+id/begin"
+                app:layout_constraintTop_toTopOf="@+id/begin" />
 
             <TextView
                 android:id="@+id/event_list_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="8dp"
                 android:text="time"
-                app:layout_constraintBottom_toBottomOf="@+id/event_list_date"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintBottom_toBottomOf="@+id/begin"
                 app:layout_constraintStart_toEndOf="@+id/event_list_date"
-                app:layout_constraintTop_toTopOf="@+id/event_list_date" />
+                app:layout_constraintTop_toTopOf="@+id/begin" />
 
             <TextView
                 android:id="@+id/event_list_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:text="type of event"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/event_list_date" />
@@ -73,30 +92,32 @@
                 android:id="@+id/event_list_privacy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
                 android:text="private/public"
-                app:layout_constraintBottom_toBottomOf="@+id/event_list_type"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/event_list_type"
-                app:layout_constraintTop_toTopOf="@+id/event_list_type" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/event_list_type" />
 
             <TextView
                 android:id="@+id/event_list_GPS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:text="GPS tracking is enabled/disabled"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/event_list_type" />
+                app:layout_constraintTop_toBottomOf="@+id/event_list_privacy" />
 
             <TextView
                 android:id="@+id/event_list_description"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:text="Dexcription of the event"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:text="Description of the event"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/event_list_GPS" />
 
@@ -104,11 +125,12 @@
                 android:id="@+id/in_progress_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 android:text="inProgress"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/event_list_name" />
+                android:textColor="#B1DC39"
+                app:layout_constraintBottom_toBottomOf="@+id/event_list_time"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/event_list_time" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

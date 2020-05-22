@@ -31,7 +31,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import cz.cvut.fel.tlappka.R
 
-const val TAG = "MapsActivity"
+private const val TAG = "MapsActivity"
 private const val LOCATION_PERMISSION_REQUEST_CODE = 1234
 private const val DEFAULT_ZOOM = 17F
 
@@ -95,8 +95,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         //override enter next line key into confimation action
         mSearchText.setOnEditorActionListener { v, actionId, event ->
             if(actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE ||
-                    event.action == KeyEvent.ACTION_DOWN ||
-                    event.action == KeyEvent.KEYCODE_ENTER) {
+                event.action == KeyEvent.ACTION_DOWN ||
+                event.action == KeyEvent.KEYCODE_ENTER) {
                 geoLocate()
                 true
             }

@@ -37,7 +37,6 @@
         <activity
             android:name=".events.MapsActivity"
             android:label="@string/title_activity_maps"></activity>
-        <activity android:name=".events.MapActivity" />
         <activity android:name=".events.CreateEventActivity" />
         <activity android:name=".options.ChangePasswordActivity" />
         <activity android:name=".options.AccountSettingsActivity" />

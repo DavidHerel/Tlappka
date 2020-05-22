@@ -1,5 +1,7 @@
 package cz.cvut.fel.tlappka
 
+import android.app.AlarmManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu

@@ -124,4 +124,8 @@ A SVÉ MAZLÍČKY</string>
 
     <string name="address_search">Vyhledat adresu, město nebo stát</string>
     <string name="choose_location">Vyberte místo konání událsoti</string>
+    <string name="edit">Upravit</string>
+    <string name="delete">Smazat</string>
+    <string name="end">Ukončit</string>
+    <string name="options">⋮</string>
 </resources>
