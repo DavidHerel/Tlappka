@@ -11,37 +11,72 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.observe
 import com.google.firebase.auth.FirebaseAuth
+import com.squareup.picasso.Picasso
 import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.model.Pet
-import kotlinx.android.synthetic.main.activity_add_pet.*
+import kotlinx.android.synthetic.main.activity_edit_pet.*
+import kotlinx.android.synthetic.main.activity_edit_pet.aboutAddPet
+import kotlinx.android.synthetic.main.activity_edit_pet.changeProfilePhotoPet
+import kotlinx.android.synthetic.main.activity_edit_pet.hobbiesAddPet
+import kotlinx.android.synthetic.main.activity_edit_pet.placeAddPet
+import kotlinx.android.synthetic.main.activity_edit_pet.profile_pet_photo_edit
+import kotlinx.android.synthetic.main.activity_edit_pet.usernameAddPet
 import kotlinx.android.synthetic.main.top_profile_edit_toolbar.*
 
 
-class AddPetActivity : AppCompatActivity() {
+class EditPetActivity : AppCompatActivity() {
     private val profileFragmentViewModel: ProfileFragmentViewModel by viewModels()
-    private var photoAdded = false;
+    private var UID : String? = "";
     //just to track the call
     private val REQUEST_IMAGE_CAPTURE = 100;
     private val REQUEST_GALLERY = 200;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_pet)
+        setContentView(R.layout.activity_edit_pet)
 
-        //profile_pet_photo_edit.setImageBitmap(drawableToBitmap(ContextCompat.getDrawable(applicationContext ,R.drawable.account_circle_24px__1_)!!))
+        if (savedInstanceState == null) {
+            val extras = intent.extras
+            UID = extras?.getString("UID")
+        } else {
+            UID = savedInstanceState.getSerializable("UID") as String?
+        }
 
-        profileName.setText("Přidat mazlíčka")
+        profile_pet_photo_edit.setImageBitmap(drawableToBitmap(ContextCompat.getDrawable(applicationContext ,R.drawable.account_circle_24px__1_)!!))
+
+        profileName.setText("Upravit mazlíčka")
         setSupportActionBar(findViewById(R.id.profileEditToolBar));
 
         addPetProfilePicButton();
         cancelAddPetButton();
-        doneAddPetButton()
+        doneAddPetButton();
+
+        fillTexts();
+        fillProfilePhoto();
     }
+
+    fun fillTexts(){
+        profileFragmentViewModel.getPet(UID!!).observe(this) { pet ->
+            // update UI
+            usernameAddPet.setText(pet?.name);
+            placeAddPet.setText(pet?.place);
+            hobbiesAddPet.setText(pet?.hobbies);
+            aboutAddPet.setText(pet?.about);
+        }
+    }
+
+    private fun fillProfilePhoto(){
+        profileFragmentViewModel.getUriProfilePet(UID!!)?.observe(this) { uri ->
+            // update UI
+            Picasso.with(this).load(uri).into(profile_pet_photo_edit)
+        }
+    }
+
 
     fun cancelAddPetButton() {
         backArrow.setOnClickListener {
@@ -55,37 +90,30 @@ class AddPetActivity : AppCompatActivity() {
     //update data
     fun doneAddPetButton() {
         saveChanges.setOnClickListener {
-            if(!photoAdded){
-                Toast.makeText(this, "Nepřidali jste fotku", Toast.LENGTH_SHORT)
-                    .show()
+            var pet = Pet();
+            pet.name = usernameAddPet.text.toString();
+            pet.about = aboutAddPet.text.toString();
+            pet.hobbies = hobbiesAddPet.text.toString();
+            pet.place = placeAddPet.text.toString();
+            pet.uid = UID!!;
+            //pet.owners.add(FirebaseAuth.getInstance().currentUser!!.uid)
+            profileFragmentViewModel.updatePet(pet);
 
-            }else {
-                var pet = Pet();
-                pet.name = usernameAddPet.text.toString();
-                pet.about = aboutAddPet.text.toString();
-                pet.hobbies = hobbiesAddPet.text.toString();
-                pet.place = placeAddPet.text.toString();
-                pet.owners.add(FirebaseAuth.getInstance().currentUser!!.uid)
-                profileFragmentViewModel.createPet(pet).observe(this) { uid ->
-                    pet.uid = uid;
-                    //TODO - now it passes to next activity only when it is succesfuly uploaded (so without internet connections it does nothing, just
-                    // stores in db after device gets online) (also all text fields when offline come blank so blank text fields are stored)
-                    profileFragmentViewModel.saveImageProfilePet(
-                        (profile_pet_photo_edit.getDrawable() as BitmapDrawable).bitmap,
-                        pet
-                    ).observe(this) { bool ->
-                        if (bool) {
-                            it.startAnimation(
-                                AnimationUtils.loadAnimation(
-                                    this,
-                                    R.anim.layout_click
-                                )
-                            );
-                            finish();
-                        }
+                profileFragmentViewModel.saveImageProfilePet(
+                    (profile_pet_photo_edit.getDrawable() as BitmapDrawable).bitmap,
+                    pet
+                ).observe(this) { bool ->
+                    if (bool) {
+                        it.startAnimation(
+                            AnimationUtils.loadAnimation(
+                                this,
+                                R.anim.layout_click
+                            )
+                        );
+                        finish();
                     }
-                };
-            }
+                }
+
         }
 
     }
@@ -127,11 +155,9 @@ class AddPetActivity : AppCompatActivity() {
                 //pic from camera
                 val imageBitmap = data?.extras?.get("data") as Bitmap
                 profile_pet_photo_edit.setImageBitmap(imageBitmap)
-                photoAdded = true;
             }else  if (requestCode == REQUEST_GALLERY){
                 val uri = data?.data;
                 //photo from gallery
-                photoAdded = true;
                 profile_pet_photo_edit.setImageURI(data?.data)
             }
         }
@@ -140,7 +166,7 @@ class AddPetActivity : AppCompatActivity() {
     private fun selectImage() {
         val options =
             arrayOf<CharSequence>("Vyfotit", "Vybrat z galerie", "Zrušit")
-        val builder: AlertDialog.Builder = AlertDialog.Builder(this@AddPetActivity)
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this@EditPetActivity)
         builder.setTitle("Přidat fotku")
         builder.setItems(options, DialogInterface.OnClickListener { dialog, item ->
             if (options[item] == "Vyfotit") {

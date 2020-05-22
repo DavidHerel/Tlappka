@@ -23,6 +23,11 @@ class ProfileFragmentViewModel : ViewModel() {
         return mUser;
     }
 
+    fun getPet(uid : String) : LiveData<Pet>{
+        mPet = profileFragmentRepository.getPet(uid);
+        return mPet;
+    }
+
     fun getUri() : LiveData<Uri>{
         mUri = profileFragmentRepository.getUri();
         return mUri;
@@ -49,9 +54,13 @@ class ProfileFragmentViewModel : ViewModel() {
         profileFragmentRepository.updateUser(user);
         mUser = profileFragmentRepository.getUser();
     }
+    fun updatePet(pet : Pet){
+        profileFragmentRepository.updatePet(pet);
+        mPet = profileFragmentRepository.getPet(pet.uid);
+    }
 
-    fun updatePet(pet : Pet) : LiveData<String>{
-        petUID = profileFragmentRepository.updatePet(pet);
+    fun createPet(pet : Pet) : LiveData<String>{
+        petUID = profileFragmentRepository.createPet(pet);
         mUser = profileFragmentRepository.getUser();
         return petUID;
     }

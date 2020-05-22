@@ -6,18 +6,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.home.PostsAdapter
 import cz.cvut.fel.tlappka.home.model.Post
-import cz.cvut.fel.tlappka.profile.adapter.CustomAdapter
+import cz.cvut.fel.tlappka.profile.adapter.PetAdapter
 import cz.cvut.fel.tlappka.profile.adapter.IkonkaModelClass
 import kotlinx.android.synthetic.main.activity_content_profile.*
 
@@ -60,7 +57,8 @@ class ProfileFragment : Fragment() {
     private fun updatePets(){
 
         var items: java.util.ArrayList<IkonkaModelClass> = java.util.ArrayList<IkonkaModelClass>()
-        val adapter = CustomAdapter(context, items)
+        val adapter =
+            PetAdapter(context, items)
         recycler_view_pets_icons.layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.HORIZONTAL,
@@ -75,7 +73,7 @@ class ProfileFragment : Fragment() {
             // update UI
             for(item in it.pets){
                 if(!item.isNullOrBlank()) {
-                    Toast.makeText(context, item + " petNumber "+  i, Toast.LENGTH_LONG).show()
+                    //Toast.makeText(context, item + " petNumber "+  i, Toast.LENGTH_LONG).show()
                     i++;
 
                     items.add(IkonkaModelClass(Uri.parse("https://picsum.photos/600/300?random&"), "t", item))

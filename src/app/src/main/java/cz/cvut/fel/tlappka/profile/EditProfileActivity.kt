@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.top_profile_edit_toolbar.*
 
 class EditProfileActivity : AppCompatActivity() {
     private val profileFragmentViewModel: ProfileFragmentViewModel by viewModels()
+    private var photoAdded = false;
 
     //just to track the call
     private val REQUEST_IMAGE_CAPTURE = 100;
@@ -35,7 +36,7 @@ class EditProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_edit_profile)
         setSupportActionBar(findViewById(R.id.profileEditToolBar));
 
-        profile_photo_edit.setImageBitmap(drawableToBitmap(ContextCompat.getDrawable(applicationContext ,R.drawable.account_circle_24px__1_)!!))
+        //profile_photo_edit.setImageBitmap(drawableToBitmap(ContextCompat.getDrawable(applicationContext ,R.drawable.account_circle_24px__1_)!!))
         cancelEditProfileButton();
         doneEditProfileButton();
         changeProfilePicButton();
@@ -83,22 +84,26 @@ class EditProfileActivity : AppCompatActivity() {
                 user.pets = userTemp.pets;
                 profileFragmentViewModel.updateUser(user);
 
-            //TODO - now it passes to next activity only when it is succesfuly uploaded (so without internet connections it does nothing, just
-            // stores in db after device gets online) (also all text fields when offline come blank so blank text fields are stored)
-            //TODO Padá to, když tam není žádná fotka a chci uložit
-                profileFragmentViewModel.saveImage((profile_photo_edit.getDrawable() as BitmapDrawable).bitmap)
-                    .observe(this) {
-                        if (it) {
-                            view.startAnimation(
-                                AnimationUtils.loadAnimation(
-                                    this,
-                                    R.anim.layout_click
+                if(photoAdded) {
+                    //TODO - now it passes to next activity only when it is succesfuly uploaded (so without internet connections it does nothing, just
+                    // stores in db after device gets online) (also all text fields when offline come blank so blank text fields are stored)
+                    //TODO Padá to, když tam není žádná fotka a chci uložit
+                    profileFragmentViewModel.saveImage((profile_photo_edit.getDrawable() as BitmapDrawable).bitmap)
+                        .observe(this) {
+                            if (it) {
+                                view.startAnimation(
+                                    AnimationUtils.loadAnimation(
+                                        this,
+                                        R.anim.layout_click
 
-                                )
-                            );
-                            finish();
+                                    )
+                                );
+                                finish();
+                            }
                         }
-                    }
+                }else{
+                    finish();
+                }
             }
         }
 
@@ -143,10 +148,12 @@ class EditProfileActivity : AppCompatActivity() {
                 //pic from camera
                 val imageBitmap = data?.extras?.get("data") as Bitmap
                 profile_photo_edit.setImageBitmap(imageBitmap)
+                photoAdded = true;
             }else  if (requestCode == REQUEST_GALLERY){
                 val uri = data?.data;
                 //photo from gallery
                 profile_photo_edit.setImageURI(data?.data)
+                photoAdded = true;
             }
         }
     }

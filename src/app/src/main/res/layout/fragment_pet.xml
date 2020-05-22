@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".profile.ProfileFragment">
 
-    <include layout="@layout/activity_content_profile"/>
+    <include layout="@layout/activity_content_pet"/>
 
 
 </FrameLayout>

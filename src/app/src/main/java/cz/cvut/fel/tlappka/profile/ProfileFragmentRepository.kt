@@ -32,6 +32,22 @@ class ProfileFragmentRepository {
         return data
     }
 
+    fun getPet(uid : String): MutableLiveData<Pet> {
+        var data : MutableLiveData<Pet> = MutableLiveData<Pet>();
+        FirebaseDatabase.getInstance().getReference("Pets")
+            .child(uid)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+
+                override fun onCancelled(p0: DatabaseError) {
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    data.value = p0.getValue(Pet::class.java)!!;
+                }
+            })
+        return data
+    }
+
     fun getUri(): MutableLiveData<Uri> {
         var data : MutableLiveData<Uri> = MutableLiveData<Uri>();
         //get storage ref
@@ -165,7 +181,17 @@ class ProfileFragmentRepository {
 
     }
 
-    fun updatePet(pet : Pet) : MutableLiveData<String>{
+    fun updatePet(pet : Pet){
+        FirebaseDatabase.getInstance().getReference("Pets").child(pet.uid)
+            .setValue(pet).addOnCompleteListener {
+                if (it.isSuccessful){
+                }else{
+                }
+            };
+
+    }
+
+    fun createPet(pet : Pet) : MutableLiveData<String>{
         var dataID : MutableLiveData<String> = MutableLiveData<String>();
        val key = FirebaseDatabase.getInstance().getReference("Pets").push().key
         dataID.value = key;

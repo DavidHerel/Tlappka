@@ -1,7 +1,6 @@
 package cz.cvut.fel.tlappka.profile
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,10 +14,7 @@ import com.squareup.picasso.Picasso
 import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.home.PostsAdapter
 import cz.cvut.fel.tlappka.home.model.Post
-import cz.cvut.fel.tlappka.profile.adapter.CustomAdapter
-import cz.cvut.fel.tlappka.profile.adapter.IkonkaModelClass
-import kotlinx.android.synthetic.main.activity_content_profile.*
-import kotlinx.android.synthetic.main.activity_edit_profile.*
+import kotlinx.android.synthetic.main.activity_content_pet.*
 
 
 /**
@@ -26,18 +22,18 @@ import kotlinx.android.synthetic.main.activity_edit_profile.*
  */
 class PetFragment : Fragment() {
     private val profileFragmentViewModel: ProfileFragmentViewModel by viewModels()
-
+    private var UID : String? = "";
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        return inflater.inflate(R.layout.fragment_pet, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        UID = arguments?.getString("UID");
         val posts: ArrayList<Post> = ArrayList()
         //TODO connect to PostContentHandler & DB
         for (i in 1..100) {
@@ -52,55 +48,51 @@ class PetFragment : Fragment() {
         recyclerViewProfile.layoutManager = LinearLayoutManager(activity)
         recyclerViewProfile.adapter = PostsAdapter(posts, requireActivity().applicationContext)
         initChangeProfileButton();
-        initAddPetButton();
 
+        Toast.makeText(context, "UID is" + UID, Toast.LENGTH_SHORT).show()
     }
 
     private fun initChangeProfileButton() {
         //listener on edit
-        changeProfileButton.setOnClickListener(View.OnClickListener {
-            val intent = Intent(activity, EditProfileActivity::class.java)
-            startActivity(intent)
-        })
-    }
-
-    private fun initAddPetButton() {
-        //listener on edit
-        addPetIcon.setOnClickListener(View.OnClickListener {
-            val intent = Intent(activity, AddPetActivity::class.java)
+        changeProfilePetButton.setOnClickListener(View.OnClickListener {
+            val intent = Intent(activity, EditPetActivity::class.java)
+            intent.putExtra("UID", UID);
             startActivity(intent)
         })
     }
 
     override fun onResume() {
         super.onResume()
-        //fillTexts();
-        //fillProfilePhoto();
+        fillTexts();
+        fillProfilePhoto();
     }
 
     //everytime the user profile data are updated -> UI refreshed
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //fillTexts();
-        //fillProfilePhoto();
+        fillTexts();
+        fillProfilePhoto();
     }
 
 
     private fun fillTexts(){
-        profileFragmentViewModel.getUser().observe(viewLifecycleOwner) { user ->
+        if(UID.isNullOrEmpty()){
+            return;
+        }
+        profileFragmentViewModel.getPet(UID!!).observe(viewLifecycleOwner) { pet ->
             // update UI
-            nameTextView.text = user?.name;
-            profilePlace.text = user?.place;
-            profileHobbies.text = user?.hobbies;
-            profileJob.text = user?.job;
-            profileAbout.text = user?.about;
+            namePetTextView.text = pet?.name;
+            profilePetPlace.text = pet?.place;
+            profilePetHobbies.text = pet?.hobbies;
+           // profilePetAge.text = pet?.birthDate.toString();
+            profilePetAbout.text = pet?.about;
         }
     }
 
     private fun fillProfilePhoto(){
-        profileFragmentViewModel.getUri().observe(viewLifecycleOwner) { uri ->
+        profileFragmentViewModel.getUriProfilePet(UID!!)?.observe(viewLifecycleOwner) { uri ->
             // update UI
-            Picasso.with(activity).load(uri).into(profileIcon)
+            Picasso.with(activity).load(uri).into(profilePetIcon)
         }
     }
 
