@@ -14,24 +14,24 @@
             android:layout_height="match_parent">
 
             <ImageView
+                android:id="@+id/backArrow"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="20dp"
                 android:layout_centerVertical="true"
-                android:id="@+id/backArrow"
-                android:src="@drawable/cancel_icon"/>
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/cancel_icon" />
 
             <TextView
-                android:layout_toRightOf="@+id/backArrow"
+                android:id="@+id/profileName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:layout_marginStart="3dp"
+                android:layout_toRightOf="@+id/backArrow"
                 android:text="Upravit profil"
-                android:textSize="20sp"
                 android:textColor="@color/colorWhite"
-                android:layout_marginStart="5dp"
-                android:id="@+id/profileName"/>
+                android:textSize="20sp" />
 
             <ImageView
                 android:layout_width="30dp"

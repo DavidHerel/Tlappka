@@ -51,7 +51,6 @@ class PetFragment : Fragment() {
         recyclerViewProfile.layoutManager = LinearLayoutManager(activity)
         recyclerViewProfile.adapter = PostsAdapter(posts, requireActivity().applicationContext)
         initChangeProfileButton();
-        //Toast.makeText(context, "UID is" + UID, Toast.LENGTH_SHORT).show()
 
         // This callback will only be called when MyFragment is at least Started.
         val callback = requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
@@ -138,6 +137,4 @@ class PetFragment : Fragment() {
             }
         }
     }
-
-
 }

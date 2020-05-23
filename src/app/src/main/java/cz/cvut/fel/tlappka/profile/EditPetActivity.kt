@@ -54,7 +54,6 @@ class EditPetActivity : AppCompatActivity() {
 
         profileName.setText("Upravit mazlíčka")
         setSupportActionBar(findViewById(R.id.profileEditToolBar));
-
         addPetProfilePicButton();
         cancelAddPetButton();
         doneAddPetButton();

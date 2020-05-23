@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
+import android.location.LocationManager
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -31,6 +32,7 @@ import cz.cvut.fel.tlappka.profile.ProfileFragmentViewModel
 import kotlinx.android.synthetic.main.activity_create_event.*
 import kotlinx.android.synthetic.main.activity_create_event.location_text
 import kotlinx.android.synthetic.main.event_item.*
+import java.lang.Exception
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -62,7 +64,7 @@ class CreateEventActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_event)
-        val toolbar : Toolbar = binding.createEventToolbar as Toolbar
+        var toolbar : Toolbar = binding.createEventToolbar as Toolbar
         setSupportActionBar(toolbar)
         supportActionBar?.setTitle(R.string.create_event_toolbar_text)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -85,12 +87,21 @@ class CreateEventActivity : AppCompatActivity() {
             doneButton()
         }
         binding.locationText.setOnClickListener{
-            val mapIntent = Intent(this, MapsActivity::class.java)
-            startActivityForResult(mapIntent, LOCATION_REQUEST_CODE)
-            locationChosen = true
+            val lm = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            var gps_enabled = false
+            try {
+                gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
+            } catch (ex: Exception) {}
+            if (gps_enabled) {
+                val mapIntent = Intent(this, MapsActivity::class.java)
+                startActivityForResult(mapIntent, LOCATION_REQUEST_CODE)
+                locationChosen = true
+            } else {
+                Toast.makeText(this, "Pro výběr místa zapněte sledování polohy", Toast.LENGTH_LONG).show()
+            }
         }
 
-        binding.customTypeEvent.setOnClickListener {
+        binding.customTypeEvent.setOnFocusChangeListener { v, hasFocus ->
             typeChosen = true
         }
 

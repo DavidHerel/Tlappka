@@ -36,7 +36,7 @@ class EditProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_edit_profile)
         setSupportActionBar(findViewById(R.id.profileEditToolBar));
 
-        //profile_photo_edit.setImageBitmap(drawableToBitmap(ContextCompat.getDrawable(applicationContext ,R.drawable.account_circle_24px__1_)!!))
+        profile_photo_edit.setImageBitmap(drawableToBitmap(ContextCompat.getDrawable(applicationContext ,R.drawable.account_circle_24px__1_)!!))
         cancelEditProfileButton();
         doneEditProfileButton();
         changeProfilePicButton();

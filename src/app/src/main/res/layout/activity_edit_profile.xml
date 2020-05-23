@@ -164,7 +164,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="13sp"
-                android:text="O mě"/>
+                android:text="O mně"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -175,7 +175,7 @@
                 android:lines="3"
                 android:minLines="3"
                 android:maxLines="6"
-                android:hint="O mě"/>
+                android:hint="O mně"/>
 
         </RelativeLayout>
 
