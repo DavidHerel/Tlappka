@@ -50,7 +50,7 @@ class EditPetActivity : AppCompatActivity() {
             UID = savedInstanceState.getSerializable("UID") as String?
         }
 
-        profile_pet_photo_edit.setImageBitmap(drawableToBitmap(ContextCompat.getDrawable(applicationContext ,R.drawable.account_circle_24px__1_)!!))
+        //profile_pet_photo_edit.setImageBitmap(drawableToBitmap(ContextCompat.getDrawable(applicationContext ,R.drawable.account_circle_24px__1_)!!))
 
         profileName.setText("Upravit mazlíčka")
         setSupportActionBar(findViewById(R.id.profileEditToolBar));

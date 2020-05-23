@@ -107,7 +107,7 @@ class RegisterActivity : AppCompatActivity() {
                                     Toast.makeText(this, "Nezapsano do db", Toast.LENGTH_LONG).show()
                                 }
                             };
-
+/*
                         val icon = BitmapFactory.decodeResource(
                             getResources(),
                             R.drawable.account_circle_24px__1_
@@ -133,6 +133,7 @@ class RegisterActivity : AppCompatActivity() {
                                 }
                             }
                         }
+                        */
                         //put it this photo into databse
                         //Toast.makeText(this, "Registrace proběhla úspěšně", Toast.LENGTH_LONG).show()
                         val intent = Intent(this, MainActivity::class.java)
