@@ -76,12 +76,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_owners_icons"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:layout_width="215dp"
+        android:layout_height="65dp"
         app:layout_constraintStart_toEndOf="@id/profilePetIcon"
         app:layout_constraintTop_toBottomOf="@id/addPetPhotoIcon"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginStart="5dp"
+        android:scrollbars="horizontal"
+        android:layout_marginTop="8dp"/>
 
     <com.google.android.material.button.MaterialButton
         android:layout_width="match_parent"

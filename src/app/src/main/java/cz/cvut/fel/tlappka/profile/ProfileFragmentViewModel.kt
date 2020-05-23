@@ -14,6 +14,7 @@ class ProfileFragmentViewModel : ViewModel() {
     private var mPet = MutableLiveData<Pet>();
     private var mUri = MutableLiveData<Uri>();
     private var mUriProfilePet : MutableLiveData<Uri>? = MutableLiveData<Uri>();
+    private var mUriUser : MutableLiveData<Uri>? = MutableLiveData<Uri>();
     private var isDoneSaving = MutableLiveData<Boolean>();
     private var isDoneSavingProfilePet = MutableLiveData<Boolean>();
     private var petUID = MutableLiveData<String>();
@@ -31,6 +32,11 @@ class ProfileFragmentViewModel : ViewModel() {
     fun getUri() : LiveData<Uri>{
         mUri = profileFragmentRepository.getUri();
         return mUri;
+    }
+
+    fun getUriUser(uid : String) : LiveData<Uri>?{
+        mUriUser = profileFragmentRepository.getUriUser(uid);
+        return mUriUser;
     }
 
     fun getUriProfilePet(uid : String) : LiveData<Uri>?{

@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.model.Pet
+import cz.cvut.fel.tlappka.model.User
 import kotlinx.android.synthetic.main.activity_edit_pet.*
 import kotlinx.android.synthetic.main.activity_edit_pet.aboutAddPet
 import kotlinx.android.synthetic.main.activity_edit_pet.changeProfilePhotoPet
@@ -32,9 +33,11 @@ import kotlinx.android.synthetic.main.top_profile_edit_toolbar.*
 class EditPetActivity : AppCompatActivity() {
     private val profileFragmentViewModel: ProfileFragmentViewModel by viewModels()
     private var UID : String? = "";
+    private var okPressed = false;
     //just to track the call
     private val REQUEST_IMAGE_CAPTURE = 100;
     private val REQUEST_GALLERY = 200;
+    private var owners : ArrayList<String> = ArrayList();
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +70,7 @@ class EditPetActivity : AppCompatActivity() {
             placeAddPet.setText(pet?.place);
             hobbiesAddPet.setText(pet?.hobbies);
             aboutAddPet.setText(pet?.about);
+            owners = pet.owners;
         }
     }
 
@@ -89,37 +93,41 @@ class EditPetActivity : AppCompatActivity() {
 
     //update data
     fun doneAddPetButton() {
-        saveChanges.setOnClickListener {
-            var pet = Pet();
-            pet.name = usernameAddPet.text.toString();
-            pet.about = aboutAddPet.text.toString();
-            pet.hobbies = hobbiesAddPet.text.toString();
-            pet.place = placeAddPet.text.toString();
-            pet.uid = UID!!;
-            //pet.owners.add(FirebaseAuth.getInstance().currentUser!!.uid)
-            profileFragmentViewModel.updatePet(pet);
+        if(!okPressed) {
+            okPressed = true;
+            saveChanges.setOnClickListener {
+                var pet = Pet();
+                pet.name = usernameAddPet.text.toString();
+                pet.about = aboutAddPet.text.toString();
+                pet.hobbies = hobbiesAddPet.text.toString();
+                pet.place = placeAddPet.text.toString();
+                pet.uid = UID!!;
+                pet.owners = owners;
+                //pet.owners.add(FirebaseAuth.getInstance().currentUser!!.uid)
+                profileFragmentViewModel.updatePet(pet);
 
-            val drawable: Drawable = profile_pet_photo_edit.getDrawable()
-            var bmp: Bitmap? = null
-            if (drawable is BitmapDrawable) {
-                bmp = (profile_pet_photo_edit.getDrawable() as BitmapDrawable).bitmap
-                profileFragmentViewModel.saveImageProfilePet(
-                    bmp,
-                    pet
-                ).observe(this) { bool ->
-                    if (bool) {
-                        it.startAnimation(
-                            AnimationUtils.loadAnimation(
-                                this,
-                                R.anim.layout_click
-                            )
-                        );
-                        finish();
+                val drawable: Drawable = profile_pet_photo_edit.getDrawable()
+                var bmp: Bitmap? = null
+                if (drawable is BitmapDrawable) {
+                    bmp = (profile_pet_photo_edit.getDrawable() as BitmapDrawable).bitmap
+                    profileFragmentViewModel.saveImageProfilePet(
+                        bmp,
+                        pet
+                    ).observe(this) { bool ->
+                        if (bool) {
+                            it.startAnimation(
+                                AnimationUtils.loadAnimation(
+                                    this,
+                                    R.anim.layout_click
+                                )
+                            );
+                            finish();
+                        }
                     }
+                } else {
                 }
-            } else {
-            }
 
+            }
         }
 
     }

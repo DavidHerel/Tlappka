@@ -76,19 +76,24 @@ class ProfileFragmentRepository {
             .reference
             .child("pics/${uid}/profilePic");
 
-        //fill photo
-        /*
-        storageRef?.downloadUrl.addOnCompleteListener { urlTask ->
-            if(urlTask.isSuccessful) {
-                urlTask.addOnCompleteListener {
-                    if(it.isSuccessful){
-                        data?.value = it.result;
-                    }
-                }
+        storageRef?.downloadUrl
+            .addOnSuccessListener {
+                // Got the download URL for 'users/me/profile.png'
+                data?.value = it;
+            }.addOnFailureListener {
+                // Handle any errors
             }
 
-        }
-        */
+        return data
+    }
+
+    fun getUriUser(uid : String): MutableLiveData<Uri>? {
+        var data : MutableLiveData<Uri>? = MutableLiveData<Uri>();
+        //get storage ref
+        val storageRef = FirebaseStorage.getInstance()
+            .reference
+            .child("pics/${uid}/profilePic");
+
         storageRef?.downloadUrl
             .addOnSuccessListener {
                 // Got the download URL for 'users/me/profile.png'

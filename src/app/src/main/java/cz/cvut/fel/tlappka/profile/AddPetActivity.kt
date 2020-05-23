@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.top_profile_edit_toolbar.*
 class AddPetActivity : AppCompatActivity() {
     private val profileFragmentViewModel: ProfileFragmentViewModel by viewModels()
     private var photoAdded = false;
+    private var okPressed = false;
     //just to track the call
     private val REQUEST_IMAGE_CAPTURE = 100;
     private val REQUEST_GALLERY = 200;
@@ -59,7 +60,8 @@ class AddPetActivity : AppCompatActivity() {
                 Toast.makeText(this, "Nepřidali jste fotku", Toast.LENGTH_SHORT)
                     .show()
 
-            }else {
+            }else if (photoAdded && !okPressed) {
+                okPressed=true;
                 var pet = Pet();
                 pet.name = usernameAddPet.text.toString();
                 pet.about = aboutAddPet.text.toString();

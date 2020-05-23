@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.top_profile_edit_toolbar.*
 class EditProfileActivity : AppCompatActivity() {
     private val profileFragmentViewModel: ProfileFragmentViewModel by viewModels()
     private var photoAdded = false;
-
+    private var okPressed = false;
     //just to track the call
     private val REQUEST_IMAGE_CAPTURE = 100;
     private val REQUEST_GALLERY = 200;
@@ -73,41 +73,42 @@ class EditProfileActivity : AppCompatActivity() {
 
     //update data
     fun doneEditProfileButton() {
-        saveChanges.setOnClickListener {view->
-            var user = User();
-            user.name = usernameProfileEdit.text.toString();
-            user.about = aboutProfileEdit.text.toString();
-            user.hobbies = hobbiesProfileEdit.text.toString();
-            user.job = jobProfileEdit.text.toString();
-            user.place = placeProfileEdit.text.toString();
-            profileFragmentViewModel.getUser().observe(this) { userTemp ->
-                user.pets = userTemp.pets;
-                profileFragmentViewModel.updateUser(user);
+        if(!okPressed) {
+            okPressed = true;
+            saveChanges.setOnClickListener { view ->
+                var user = User();
+                user.name = usernameProfileEdit.text.toString();
+                user.about = aboutProfileEdit.text.toString();
+                user.hobbies = hobbiesProfileEdit.text.toString();
+                user.job = jobProfileEdit.text.toString();
+                user.place = placeProfileEdit.text.toString();
+                profileFragmentViewModel.getUser().observe(this) { userTemp ->
+                    user.pets = userTemp.pets;
+                    profileFragmentViewModel.updateUser(user);
 
-                if(photoAdded) {
-                    //TODO - now it passes to next activity only when it is succesfuly uploaded (so without internet connections it does nothing, just
-                    // stores in db after device gets online) (also all text fields when offline come blank so blank text fields are stored)
-                    //TODO Padá to, když tam není žádná fotka a chci uložit
-                    val drawable: Drawable = profile_photo_edit.getDrawable()
-                    var bmp: Bitmap? = null
-                    if (drawable is BitmapDrawable) {
-                        bmp = (profile_photo_edit.getDrawable() as BitmapDrawable).bitmap
-                        profileFragmentViewModel.saveImage(
-                            bmp
-                        ).observe(this) { bool ->
-                            if (bool) {
-                                finish();
+                    if (photoAdded) {
+                        //TODO - now it passes to next activity only when it is succesfuly uploaded (so without internet connections it does nothing, just
+                        // stores in db after device gets online) (also all text fields when offline come blank so blank text fields are stored)
+                        val drawable: Drawable = profile_photo_edit.getDrawable()
+                        var bmp: Bitmap? = null
+                        if (drawable is BitmapDrawable) {
+                            bmp = (profile_photo_edit.getDrawable() as BitmapDrawable).bitmap
+                            profileFragmentViewModel.saveImage(
+                                bmp
+                            ).observe(this) { bool ->
+                                if (bool) {
+                                    finish();
+                                }
                             }
+                        } else {
                         }
                     } else {
+                        finish();
                     }
-                }else{
-                    finish();
                 }
             }
+
         }
-
-
 
     }
 

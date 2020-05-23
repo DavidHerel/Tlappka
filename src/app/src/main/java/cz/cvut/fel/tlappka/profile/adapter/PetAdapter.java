@@ -26,6 +26,7 @@ import java.util.List;
 import cz.cvut.fel.tlappka.R;
 import cz.cvut.fel.tlappka.model.Pet;
 import cz.cvut.fel.tlappka.profile.PetFragment;
+import cz.cvut.fel.tlappka.profile.ProfileFragment;
 
 public class PetAdapter extends RecyclerView.Adapter<PetAdapter.MyViewHolder> {
     private Context context;
@@ -68,17 +69,27 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.MyViewHolder> {
         public void onClick(View view) {
             selectedPosition = getAbsoluteAdapterPosition();
             notifyDataSetChanged();
-            Toast.makeText(context, " SelectedPosition" + selectedPosition, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, " SelectedPosition" + selectedPosition, Toast.LENGTH_SHORT).show();
             if (selectedPosition >= 0) {
-                //profileIntent.putExtra("UID", petList.get(selectedPosition).getUID());
-                PetFragment petFragment = new PetFragment();
-                Bundle arguments = new Bundle();
-                arguments.putString("UID", petList.get(selectedPosition).getUID());
-                petFragment.setArguments(arguments);
-                FragmentTransaction fragmentTransaction = ((FragmentActivity) context).getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.container, petFragment);
+                if(petList.get(selectedPosition).isPet()) {
+                    PetFragment petFragment = new PetFragment();
+                    Bundle arguments = new Bundle();
+                    arguments.putString("UID", petList.get(selectedPosition).getUID());
+                    petFragment.setArguments(arguments);
+                    FragmentTransaction fragmentTransaction = ((FragmentActivity) context).getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.container, petFragment);
 //        fragmentTransaction.addToBackStack(null)
-                fragmentTransaction.commit();
+                    fragmentTransaction.commit();
+                }else{
+                    ProfileFragment profileFragment = new ProfileFragment();
+                    Bundle arguments = new Bundle();
+                    arguments.putString("UID", petList.get(selectedPosition).getUID());
+                    profileFragment.setArguments(arguments);
+                    FragmentTransaction fragmentTransaction = ((FragmentActivity) context).getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.container, profileFragment);
+//        fragmentTransaction.addToBackStack(null)
+                    fragmentTransaction.commit();
+                }
             }
         }
 

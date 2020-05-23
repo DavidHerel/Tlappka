@@ -66,23 +66,14 @@ class ProfileFragment : Fragment() {
         )
         recycler_view_pets_icons.adapter = adapter
 
-        var i = 0;
         //getting user
         profileFragmentViewModel.getUser().observe(viewLifecycleOwner) {
             items.clear();
             // update UI
             for(item in it.pets){
                 if(!item.isNullOrBlank()) {
-                    //Toast.makeText(context, item + " petNumber "+  i, Toast.LENGTH_LONG).show()
-                    i++;
-/*
-                    items.add(IkonkaModelClass(Uri.parse("https://picsum.photos/600/300?random&"), "t", item))
-                    adapter.notifyDataSetChanged()
-*/
-                    //TODO - Tady je chyba, padá do, když chci použít fotky z DB
-
                     profileFragmentViewModel.getUriProfilePet(item)?.observe(viewLifecycleOwner){uri->
-                            items.add(IkonkaModelClass(uri, "Popisek", item))
+                            items.add(IkonkaModelClass(uri, "Popisek", item, true))
                             adapter.notifyDataSetChanged()
                     }
 

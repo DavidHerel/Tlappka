@@ -5,8 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +15,8 @@ import com.squareup.picasso.Picasso
 import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.home.PostsAdapter
 import cz.cvut.fel.tlappka.home.model.Post
+import cz.cvut.fel.tlappka.profile.adapter.IkonkaModelClass
+import cz.cvut.fel.tlappka.profile.adapter.PetAdapter
 import kotlinx.android.synthetic.main.activity_content_pet.*
 
 
@@ -48,8 +51,18 @@ class PetFragment : Fragment() {
         recyclerViewProfile.layoutManager = LinearLayoutManager(activity)
         recyclerViewProfile.adapter = PostsAdapter(posts, requireActivity().applicationContext)
         initChangeProfileButton();
+        //Toast.makeText(context, "UID is" + UID, Toast.LENGTH_SHORT).show()
 
-        Toast.makeText(context, "UID is" + UID, Toast.LENGTH_SHORT).show()
+        // This callback will only be called when MyFragment is at least Started.
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            val profileFragment = ProfileFragment()
+            val fragmentTransaction =
+                (context as FragmentActivity).supportFragmentManager.beginTransaction()
+            fragmentTransaction.replace(R.id.container, profileFragment)
+//        fragmentTransaction.addToBackStack(null)
+            //        fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+        }
     }
 
     private fun initChangeProfileButton() {
@@ -65,6 +78,7 @@ class PetFragment : Fragment() {
         super.onResume()
         fillTexts();
         fillProfilePhoto();
+        updateOwners()
     }
 
     //everytime the user profile data are updated -> UI refreshed
@@ -72,6 +86,7 @@ class PetFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         fillTexts();
         fillProfilePhoto();
+        updateOwners()
     }
 
 
@@ -96,12 +111,32 @@ class PetFragment : Fragment() {
         }
     }
 
-    private fun hideProgressBar() {
-        profileProgressBar.visibility = View.VISIBLE;
-    }
+    private fun updateOwners(){
+        //TODO - když uživatel nemá žádnou fotku tak to spadne :D
+        var items: java.util.ArrayList<IkonkaModelClass> = java.util.ArrayList<IkonkaModelClass>()
+        val adapter =
+            PetAdapter(context, items)
+        recycler_view_owners_icons.layoutManager = LinearLayoutManager(
+            context,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        recycler_view_owners_icons.adapter = adapter
 
-    private fun showProgressBar() {
-        profileProgressBar.visibility = View.GONE;
+        //getting user
+        profileFragmentViewModel.getPet(UID!!).observe(viewLifecycleOwner) {
+            items.clear();
+            // update UI
+            for(item in it.owners){
+                if(!item.isNullOrBlank()) {
+                    profileFragmentViewModel.getUriUser(item)?.observe(viewLifecycleOwner){uri->
+                        items.add(IkonkaModelClass(uri, "Popisek", item, false))
+                        adapter.notifyDataSetChanged()
+                    }
+
+                }
+            }
+        }
     }
 
 

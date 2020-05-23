@@ -3,10 +3,11 @@ package cz.cvut.fel.tlappka.login
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.util.Patterns
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -15,11 +16,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import cz.cvut.fel.tlappka.MainActivity
 import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.model.User
+import java.io.ByteArrayOutputStream
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 /*
 Activity which is hadnling registers
@@ -104,7 +108,32 @@ class RegisterActivity : AppCompatActivity() {
                                 }
                             };
 
+                        val icon = BitmapFactory.decodeResource(
+                            getResources(),
+                            R.drawable.account_circle_24px__1_
+                        )
+                        val storageRef = FirebaseStorage.getInstance()
+                            .reference
+                            .child("pics/${FirebaseAuth.getInstance().currentUser!!.uid}/profilePic");
+                        var bitmap = icon;
+                        val baos = ByteArrayOutputStream();
+                        //compress (100 means best image quality, 0 means worst)
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, baos);
+                        val image = baos.toByteArray();
 
+                        //put it in storage database
+                        val upload = storageRef.putBytes(image);
+
+                        //when uploaded
+                        upload.addOnCompleteListener{ uploadTask ->
+                            if (uploadTask.isSuccessful){
+
+                            }else{
+                                uploadTask.exception?.let {
+                                }
+                            }
+                        }
+                        //put it this photo into databse
                         //Toast.makeText(this, "Registrace proběhla úspěšně", Toast.LENGTH_LONG).show()
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
