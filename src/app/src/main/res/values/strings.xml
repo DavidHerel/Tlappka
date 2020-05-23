@@ -128,4 +128,8 @@ A SVÉ MAZLÍČKY</string>
     <string name="delete">Smazat</string>
     <string name="end">Ukončit</string>
     <string name="options">⋮</string>
+    <string name="begin_time_string">Začátek</string>
+    <string name="end_time_string">Konec</string>
+    <string name="empty_history">Nemáte žádné proběhlé události</string>
+    <string name="empty_planned">Nemáte žádné naplánované události</string>
 </resources>

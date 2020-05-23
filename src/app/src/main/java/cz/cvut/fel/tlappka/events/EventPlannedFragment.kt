@@ -23,6 +23,7 @@ import java.time.LocalTime
 
 class EventPlannedFragment : Fragment() {
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -40,7 +41,7 @@ class EventPlannedFragment : Fragment() {
             .child(FirebaseAuth.getInstance().currentUser!!.uid)
 
         val listener = object : ValueEventListener {
-            var eventList = mutableListOf<EventItem>()
+            var eventList = arrayListOf<EventItem>()
 
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.w("Planned events", "loadPost:onCancelled", databaseError.toException())
@@ -49,7 +50,7 @@ class EventPlannedFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
 
                 dataSnapshot.children.forEach {
-
+                    val id = it.child("id").getValue(String::class.java)
                     val text = it.child("description").getValue(String::class.java)
                     val gpsTracking = it.child("gps_tracking").getValue(Boolean::class.java)
                     val inProgress = it.child("in_progress").getValue(Boolean::class.java)
@@ -58,9 +59,16 @@ class EventPlannedFragment : Fragment() {
                     val type = it.child("type").getValue(String::class.java)
                     val date = it.child("date").getValue(String::class.java)
                     val time = it.child("time").getValue(String::class.java)
+                    val place = it.child("place").getValue(String::class.java)
 
-                    val event = EventItem(name, inProgress, date, time, text, type, private, gpsTracking)
+                    val event = EventItem(id, name, inProgress, date, time, text, type, private, gpsTracking, place)
                     eventList.add(event)
+                }
+                if (eventList.isEmpty()) {
+                    empty_planned_text.visibility = View.VISIBLE
+                }
+                else {
+                    empty_planned_text.visibility = View.GONE
                 }
                 recycler_planned_events.layoutManager = LinearLayoutManager(activity)
                 recycler_planned_events.adapter = EventsAdapter(eventList, requireActivity())

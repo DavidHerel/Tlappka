@@ -29,6 +29,8 @@ import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.databinding.ActivityCreateEventBinding
 import cz.cvut.fel.tlappka.profile.ProfileFragmentViewModel
 import kotlinx.android.synthetic.main.activity_create_event.*
+import kotlinx.android.synthetic.main.activity_create_event.location_text
+import kotlinx.android.synthetic.main.event_item.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -54,6 +56,8 @@ class CreateEventActivity : AppCompatActivity() {
     private lateinit var locationText: EditText
     private var dateChosen: Boolean = false
     private var timeChosen: Boolean = false
+    private var locationChosen: Boolean = false
+    private var typeChosen: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,9 +86,12 @@ class CreateEventActivity : AppCompatActivity() {
         }
         binding.locationText.setOnClickListener{
             val mapIntent = Intent(this, MapsActivity::class.java)
-//            startActivity(mapIntent)
-            //TODO this needs to be fixed, now it crashed the app
             startActivityForResult(mapIntent, LOCATION_REQUEST_CODE)
+            locationChosen = true
+        }
+
+        binding.customTypeEvent.setOnClickListener {
+            typeChosen = true
         }
 
         val imm: InputMethodManager =
@@ -143,7 +150,12 @@ class CreateEventActivity : AppCompatActivity() {
 //            (custom_date.text.toString() == "Vybrat datum" || custom_time.text.toString().equals("Vybrat čas"))) {
             Toast.makeText(applicationContext, "Vyplňte datum a čas události", Toast.LENGTH_LONG).show()
             return
-        } else {
+        } else if (radio_other.isChecked && !typeChosen) {
+//            (custom_date.text.toString() == "Vybrat datum" || custom_time.text.toString().equals("Vybrat čas"))) {
+        Toast.makeText(applicationContext, "Vyplňte typ události", Toast.LENGTH_LONG).show()
+        return
+        }
+        else {
             addEvent()
             Toast.makeText(applicationContext, "Událost vytvořena", Toast.LENGTH_LONG).show()
             startActivity(Intent(this, MainActivity::class.java))
@@ -172,15 +184,24 @@ class CreateEventActivity : AppCompatActivity() {
             time = timeFormat.format(now.time)
         }
         val private: Boolean = radio_private.isChecked
-        var newEvent = EventItem(name, inProgress, date, time, text, type, private, false)
+        val GPS_tracking: Boolean = location_switch.isChecked
+        val userEvents = FirebaseDatabase.getInstance().getReference("Events")
+            .child(FirebaseAuth.getInstance().currentUser!!.uid)
+        val id = userEvents.push().key!!
+        val location: String
+        if (locationChosen) {
+            location = location_text.text.toString()
+        } else {
+            location = ""
+        }
+        val newEvent = EventItem(id, name, inProgress, date, time, text, type, private, GPS_tracking, location)
+        userEvents.child(id).setValue(newEvent)
 
-        FirebaseDatabase.getInstance().getReference("Events")
-            .child(FirebaseAuth.getInstance().currentUser!!.uid).push().setValue(newEvent)
 
         if (!inProgress) {
             val alarmManager: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val notifIntent = Intent(this, AlarmReceiver::class.java)
-            notifIntent.putExtra("event", newEvent)
+            notifIntent.putExtra("eventId", id)
             val calendar = Calendar.getInstance()
             val dateItems = date.split(" ")
             val timeItem = time.split(":")

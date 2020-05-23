@@ -1,8 +1,10 @@
 package cz.cvut.fel.tlappka.events
 
-import java.io.Serializable
+import android.os.Parcel
+import android.os.Parcelable
 
 data class EventItem(
+    var id: String?,
     val name: String?,
     var in_progress: Boolean?,
     val date: String?,
@@ -12,8 +14,10 @@ data class EventItem(
     val description: String?,
     val type: String?,
     val private: Boolean?,
-    val GPS_tracking: Boolean?
-): Serializable {
-    constructor() : this("", true, "", "",
-        "", "", true, false)
+    val GPS_tracking: Boolean?,
+    val place: String?
+) {
+    constructor() : this("", "", true, "", "",
+        "", "", true, false, "")
+
 }

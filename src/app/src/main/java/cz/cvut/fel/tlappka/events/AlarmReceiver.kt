@@ -13,8 +13,14 @@ import com.google.firebase.database.FirebaseDatabase
 import cz.cvut.fel.tlappka.MainActivity
 import cz.cvut.fel.tlappka.R
 
-public class AlarmReceiver : BroadcastReceiver() {
+class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
+
+        val eventId: String? = intent?.getStringExtra("eventId")
+        FirebaseDatabase.getInstance().getReference("Events")
+            .child(FirebaseAuth.getInstance().currentUser!!.uid)
+            .child(eventId!!).child("in_progress").setValue(true)
+
         val notificationIntent = Intent(context, MainActivity::class.java)
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(MainActivity::class.java)
@@ -33,10 +39,6 @@ public class AlarmReceiver : BroadcastReceiver() {
         val notificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(0,notification)
 
-//        var eventItem = intent?.getSerializableExtra("event") as EventItem
-//        eventItem.in_progress = true
-//        FirebaseDatabase.getInstance().getReference("Events")
-//            .child(FirebaseAuth.getInstance().currentUser!!.uid).push().setValue(eventItem)
     }
 
 }
