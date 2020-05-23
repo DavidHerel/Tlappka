@@ -81,4 +81,20 @@
         <item name="backgroundTint">@color/colorWhite</item>
     </style>
 
+    <style name="walk_event_style">
+        <item name="android:textColor">@color/colorTextBlack</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/roboto_condensed_regular</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
+
+    <style name="walk_event_style_bold">
+        <item name="android:textColor">@color/colorTextBlack</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/roboto_condensed_bold</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
+
 </resources>

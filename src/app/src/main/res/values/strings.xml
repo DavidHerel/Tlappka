@@ -132,4 +132,5 @@ A SVÉ MAZLÍČKY</string>
     <string name="end_time_string">Konec</string>
     <string name="empty_history">Nemáte žádné proběhlé události</string>
     <string name="empty_planned">Nemáte žádné naplánované události</string>
+    <string name="title_activity_walk_event">Procházka</string>
 </resources>

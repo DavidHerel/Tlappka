@@ -1,7 +1,6 @@
 package cz.cvut.fel.tlappka.events
 
 import android.app.*
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
@@ -11,23 +10,19 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.RadioButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.NotificationCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.observe
-import com.google.android.libraries.places.widget.Autocomplete
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.squareup.picasso.Picasso
 import cz.cvut.fel.tlappka.MainActivity
 import cz.cvut.fel.tlappka.R
 import cz.cvut.fel.tlappka.databinding.ActivityCreateEventBinding
+import cz.cvut.fel.tlappka.events.tracking.WalkEventActivity
 import cz.cvut.fel.tlappka.profile.ProfileFragmentViewModel
 import kotlinx.android.synthetic.main.activity_create_event.*
 import kotlinx.android.synthetic.main.activity_create_event.location_text
@@ -104,11 +99,9 @@ class CreateEventActivity : AppCompatActivity() {
         binding.customTypeEvent.setOnFocusChangeListener { v, hasFocus ->
             typeChosen = true
         }
-
         val imm: InputMethodManager =
             getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(eventName.getWindowToken(), 0)
-
     }
 
     //handle result from map search
@@ -168,8 +161,14 @@ class CreateEventActivity : AppCompatActivity() {
         }
         else {
             addEvent()
-            Toast.makeText(applicationContext, "Událost vytvořena", Toast.LENGTH_LONG).show()
-            startActivity(Intent(this, MainActivity::class.java))
+            //Toast.makeText(applicationContext, "Událost vytvořena", Toast.LENGTH_LONG).show()
+            if (walkRadio.isChecked() && nowRadio.isChecked() && binding.locationSwitch.isChecked()) {
+                Toast.makeText(applicationContext, "Zacina prochazka", Toast.LENGTH_LONG).show()
+                startActivity(Intent(this, WalkEventActivity::class.java))
+            } else {
+                Toast.makeText(applicationContext, "Událost vytvořena", Toast.LENGTH_LONG).show()
+                startActivity(Intent(this, MainActivity::class.java))
+            }
         }
     }
 

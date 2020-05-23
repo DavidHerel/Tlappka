@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".events.tracking.WalkEventActivity" >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            layout="@layout/toolbar"
+            android:id="@+id/activity_walk_toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@string/title_activity_walk_event" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_map"
+            android:layout_width="match_parent"
+            android:layout_height="320dp"
+            android:layout_margin="@dimen/general_space"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/activity_walk_toolbar">
+
+            <fragment
+                android:id="@+id/map_walk"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.cardview.widget.CardView>
+
+        <ImageButton
+            android:id="@+id/walk_pause_button"
+            android:layout_marginTop="@dimen/general_space"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/round_button"
+            android:elevation="@dimen/button_anim_default"
+            android:scaleType="center"
+            android:shape="oval"
+            android:src="@drawable/ic_play_arrow_white_24dp"
+            android:stateListAnimator="@animator/anim_button"
+            app:background="@color/colorTextDarkGrey"
+            app:layout_constraintTop_toBottomOf="@+id/card_view_map"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <ImageButton
+            android:id="@+id/walk_stop_button"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="@dimen/general_space"
+            android:background="@drawable/round_button"
+            android:elevation="@dimen/button_anim_default"
+            android:scaleType="center"
+            android:shape="oval"
+            android:src="@drawable/ic_stop_white_24dp"
+            android:stateListAnimator="@animator/anim_button"
+            app:background="@color/colorTextDarkGrey"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintTop_toBottomOf="@+id/card_view_map"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintStart_toEndOf="@+id/walk_pause_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/general_space"
+            android:layout_marginStart="@dimen/general_space"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/walk_pause_button">
+
+            <TextView
+                android:id="@+id/walk_time"
+                style="@style/walk_event_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/general_space"
+                android:gravity="top"
+                android:includeFontPadding="false"
+                android:text="Čas"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/walk_current_time"
+                style="@style/walk_event_style_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/general_space"
+                android:layout_marginStart="80dp"
+                android:gravity="top"
+                android:includeFontPadding="false"
+                android:text="00:00"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/walk_time"/>
+
+            <TextView
+                android:id="@+id/walk_pace"
+                style="@style/walk_event_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/basic_padding"
+                android:gravity="top"
+                android:includeFontPadding="false"
+                android:text="Tempo"
+                app:layout_constraintTop_toBottomOf="@+id/walk_time"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/walk_current_pace"
+                style="@style/walk_event_style_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/basic_padding"
+                android:gravity="top"
+                android:includeFontPadding="false"
+                android:text="0 km/h"
+                app:layout_constraintTop_toBottomOf="@+id/walk_time"
+                app:layout_constraintStart_toStartOf="@+id/walk_current_time" />
+
+            <TextView
+                android:id="@+id/walk_distance"
+                style="@style/walk_event_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/basic_padding"
+                android:gravity="top"
+                android:includeFontPadding="false"
+                android:text="Vzdálenost"
+                app:layout_constraintTop_toBottomOf="@+id/walk_pace"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/walk_current_distance"
+                style="@style/walk_event_style_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/basic_padding"
+                android:gravity="top"
+                android:includeFontPadding="false"
+                android:text="0.00 km"
+                app:layout_constraintTop_toBottomOf="@+id/walk_pace"
+                app:layout_constraintStart_toStartOf="@+id/walk_current_time" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--
+        <ImageButton
+            android:id="@+id/button_maps"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/round_button"
+            android:elevation="@dimen/button_anim_default"
+            android:scaleType="center"
+            android:shape="oval"
+            android:src="@drawable/ic_check_white_24dp"
+            android:stateListAnimator="@animator/anim_button"
+            app:background="@color/colorTextDarkGrey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" /> -->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
