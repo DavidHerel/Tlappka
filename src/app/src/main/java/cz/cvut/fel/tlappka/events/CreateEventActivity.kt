@@ -178,7 +178,7 @@ class CreateEventActivity : AppCompatActivity() {
 
         if (inProgress) {
             val now = Calendar.getInstance()
-            val dateFormat = SimpleDateFormat("dd MMM YYYY", Locale.US)
+            val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.US)
             val timeFormat = SimpleDateFormat("HH:mm", Locale.US)
             date = dateFormat.format(now.time)
             time = timeFormat.format(now.time)
@@ -240,7 +240,7 @@ class CreateEventActivity : AppCompatActivity() {
 
     private fun dateAndTime() {
         val now = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("dd MMM YYYY", Locale.US)
+        val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.US)
         val timeFormat = SimpleDateFormat("HH:mm", Locale.US)
 
         date.setOnClickListener {
