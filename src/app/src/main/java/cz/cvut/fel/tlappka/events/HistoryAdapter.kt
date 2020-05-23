@@ -98,7 +98,7 @@ class HistoryAdapter(private var historyList: ArrayList<HistoryItem>, private va
     private fun getTime(time: Long?): CharSequence? {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = time!!
-        val formatter = SimpleDateFormat("dd MMM YYYY  HH:mm", Locale.US)
+        val formatter = SimpleDateFormat("dd MMM yyyy  HH:mm", Locale.US)
         return formatter.format(calendar.time)
     }
 
